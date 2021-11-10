@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Website</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@498&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+    <script src="jquery-3.6.0.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <div class ="wrapper">  
+        <header>
+            <a href="index.html" class="header-brand">Event TRACKER</a>
+            <p class="slogan">
+                The Place to Go to Find Where to Go
+            </p>
+        </header>
+        <div class=inputwrapper>
+            <div class=input-location>
+                <div class="input-street">
+                    <p class="prompt">Enter Your Street Information</p>
+                    <input type="text" placeholder="Enter Text Here" data-street-info>
+                </div>
+                <div class="input-city">
+                    <p class="prompt">Enter Your City</p>
+                    <input type="text" placeholder="Enter Text Here">
+                </div>
+                <div class="input-province">
+                    <p class="prompt">Enter Your Province</p>
+                    <input list="provinces" type="text" placeholder="Enter Text Here">
+                    <datalist id="provinces">
+                        <option value="ON"></option>
+                        <option value="QC"></option>
+                        <option value="NB"></option>
+                        <option value="NS"></option>
+                        <option value="PE"></option>
+                        <option value="NL"></option>
+                        <option value="AB"></option>
+                        <option value="MN"></option>
+                        <option value="SK"></option>
+                        <option value="BC"></option>
+                        <option value="AB"></option>
+                        <option value="YT"></option>
+                        <option value="NT"></option>
+                        <option value="NU"></option>
+                    </datalist>
+                </div>
+                <div class="section-go">
+                    <button class="go" data-go>Find Me</button>
+                </div>
+            </div>
+        </div>
+        <div id="map"></div>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCiBk5KKCy9blhUxRGXjGbrLE1Ug7UTg_s&callback=initMap" async></script>
+        <div class="input-param">
+            <div class="title-block-2-wrapper">
+                <p class="title-block-2">Choose Your Settings</p>
+            </div>
+            <div class="checkbox-list">
+                <input type="checkbox" id="weather" class="check">
+                    <label for="weather" class="label">Best for the Weather</label>
+                <input type="checkbox" id="distance" class="check">
+                    <label for="distance" class="label">Closest to You</label>
+                <input type="checkbox" id="cheapest" class="check">
+                    <label for="cheapest" class="label">Most Affordable</label>
+                <input type="checkbox" id="open" class="check">
+                    <label for="open" class="label">Open Now</label>
+            </div>
+            <div class="other-params">
+                <div class="specific-places">
+                    <p class="places-prompt">Filter For:</p>
+                    <input type="text" placeholder="Enter Text Here">
+                </div>
+                <div class="currency">
+                    <p class="currency-prompt">Choose Your Currency:</p>
+                    <input type="text" placeholder="CAD">
+                </div>
+                <div class="price-range">
+                    <p class="price-range-prompt">Enter Price Range:</p>
+                    <input type="text" placeholder="0-100">
+                </div>
+            </div>
+            <div class="section-places">
+                <button class="search" id="search-button" data-go>Show Recommendations</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
