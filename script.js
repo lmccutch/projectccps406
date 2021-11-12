@@ -1,5 +1,3 @@
-//Testing Github
-
 var latlng = {lat: 7, lng: 7};
 
 function initMap() {
