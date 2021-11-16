@@ -55,7 +55,7 @@ function hotelSubmission () {
         "rooms": "1",               /* should be switched to an input */
         "chldAge": "7%2C10",          /* should be switched to an input */
         "amen": "beach%2Cbar_lounge%2Cairport_transportation",   /* should be switched to an input */
-        "checkin": "2021-12-08",    /* should be switched to an input */
+        "checkin": "2021-12-12",    /* should be switched to an input */
         "nights": "2",              /* should be switched to an input */
         "cur": 'USD',
         "lunit": 'km', 
@@ -67,11 +67,24 @@ function hotelSubmission () {
     var req = new HotelRequest(resultFunction, hotel_request_args);
 }
 
-const searchButton = document.querySelector("#btn_search");
-searchButton.addEventListener('click', () => {
+const restaurantSearchButton = document.querySelector("#btn_search_restaurants");
+restaurantSearchButton.addEventListener('click', () => {
+    console.log('Search button clicked...');
+    restaurantSubmission();
+})
+
+const attractionSearchButton = document.querySelector("#btn_search_attractions");
+attractionSearchButton.addEventListener('click', () => {
+    console.log('Search button clicked...');
+    attractionSubmission();
+})
+
+const hotelSearchButton = document.querySelector("#btn_search_hotels");
+hotelSearchButton.addEventListener('click', () => {
     console.log('Search button clicked...');
     hotelSubmission();
 })
+
 
 function resultFunction (results, resultLength) {
     const resultContainer = document.querySelector('#resultContainer');
