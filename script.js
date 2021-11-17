@@ -1,4 +1,14 @@
 var latlng = {lat: 7, lng: 7};
+var myObj = [
+	{"name":"Lets", "age":30},
+	{"name":"See", "age":30},
+	{"name":"If", "age":30},
+	{"name":"This", "age":30},
+	{"name":"Works", "age":30},
+	{"name":"Fifth", "age":30},
+	{"name":"Try", "age":30},
+    {"name":"EVEN MORE", "age":30}
+];
 
 function initMap() {
     var position = { lat: 43.658298, lng: -79.380783 };
@@ -78,3 +88,26 @@ $(function() {
     });
 
 });
+
+function displayResults(data) {
+	// Add array elements in "data" to HTML. Parameter "n" is length of "data". 
+	const container = document.querySelector('#resultContainer');
+	for (let i=0; i < data.length; i++) {
+		let tempDiv = document.createElement('div');
+		tempDiv.className = "result";
+		tempDiv.innerHTML = String(data[i]["name"]);
+		// tempDiv.setAttribute() 
+		container.appendChild(tempDiv);
+	}
+}
+
+window.onload = function(){
+    const searchButton = document.querySelector("#search-button");
+    const outputDiv = document.querySelector("#output-section");
+    searchButton.addEventListener('click', () => {
+        const height = (myObj.length * 40 + 90 + 20).toString();
+	    $(outputDiv).animate({height: height});
+        displayResults(myObj);
+    })
+}
+

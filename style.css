@@ -564,3 +564,42 @@ input:focus::placeholder {
         opacity: 0;
     }
 } 
+
+.output {
+    margin-top: 1%;
+    margin-bottom: 3%;
+    width: 100%;
+    height: auto;
+/*    height: 340px; */
+    background-color: rgba(64, 207, 171, 0.932);
+    float: left;
+}
+
+.result-header-wrapper {
+    width: 100vw;
+    height: 90px;
+}
+
+.result-header {
+    font-family: Garamond;
+    font-size: 45px;
+    font-weight: 250;
+    color: white;
+    float: left;
+    width: 100vw;
+    padding-top: 20px;
+    padding-left: 20px;
+}
+
+#resultContainer {
+    width: 100vw;
+    height: 0;
+    font-family: Garamond;
+    font-size: 40px;
+    font-weight: 100;
+    color: white;
+    float: left;
+    width: auto;
+    padding-bottom: 10px;
+    padding-left: 30px;
+}
