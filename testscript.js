@@ -1,5 +1,3 @@
-
-
 var latlng = {lat: 7, lng: 7};
 var myObj = [
 	{"name":"Lets", "age":30},
@@ -63,9 +61,7 @@ console.log(latlng);
 */
 
 $(function() {
-
     console.log($("#search-button").css("position"));
-    
 });
 
 $(function() {
@@ -94,7 +90,7 @@ $(function() {
 function displayResults(data) {
 	// Add array elements in "data" to HTML. Parameter "n" is length of "data". 
 	const container = document.querySelector('#resultContainer');
-	for (let i=0; i < data.length; i++) {
+	for (let i=0; i < data.length && i <= 10; i++) {
 		let tempDiv = document.createElement('div');
 		tempDiv.className = "result";
 		tempDiv.innerHTML = String(data[i]["name"]);
@@ -109,15 +105,11 @@ function displayResults(data) {
 window.onload = function() {
 
     const searchButton = document.querySelector("#search-button");
-    const outputDiv = document.querySelector("#output-section");
     
     searchButton.addEventListener('click', () => {
-        const height = (myObj.length * 40 + 90 + 20).toString();
-        $(outputDiv).animate({height: height});
         console.log('Search button clicked...');
         restaurantSubmission();
     });
-
 }
 
 function restaurantSubmission () {
@@ -144,13 +136,30 @@ function restaurantSubmission () {
 }
 
 
-
+// When we add the other outputs, we need to call a single function to print them all
+// Right now, it is resizing the output div based on the resultLength of only the restaurants
+// We need to change it so that it compares the length of all results, then chooses the largest one to resize, or we can just hardcode the output size to always be at max
 function resultFunction (results, resultLength) {
+
     const resultContainer = document.querySelector('#resultContainer');
-    for (let i=0; i < resultLength; i++) {
+    const outputDiv = document.querySelector("#output-section");
+
+    if(resultLength >= 10) {
+        $(outputDiv).animate({height: "560"});
+    }
+    else {
+        const height = (resultLength * 45 + 90 + 20).toString();
+        $(outputDiv).animate({height: height});
+    }
+
+    for (let i=0; i < resultLength && i < 10; i++) {
         let tempDiv = document.createElement('div');
         tempDiv.classname = 'resultDiv';
-        tempDiv.innerHTML = String(results[i]['name']);
+        tempDiv.innerHTML = String((i+1) + ". " + results[i]['name']);
+        tempDiv.style.padding = "2.5px";
+        if(i % 2 != 0) {
+            tempDiv.style.backgroundColor = "rgba(52, 151, 125, 0.932)";
+        }
         resultContainer.appendChild(tempDiv);
     }
 }
