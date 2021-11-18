@@ -101,9 +101,11 @@ function displayResults(data) {
 	}
 }
 
+const searchButton = document.querySelector("#search-button");
+const outputDiv = document.querySelector("#output-section");
 window.onload = function(){
-    const searchButton = document.querySelector("#search-button");
-    const outputDiv = document.querySelector("#output-section");
+    
+    
     searchButton.addEventListener('click', () => {
         const height = (myObj.length * 40 + 90 + 20).toString();
 	    $(outputDiv).animate({height: height});

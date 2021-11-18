@@ -1,8 +1,10 @@
 import { RestaurantRequest, AttractionRequest, HotelRequest } from "./requester.mjs";
 
 function restaurantSubmission () {
-    let input_latitude = document.getElementById('input_latitude').value;
-    let input_longitude = document.getElementById('input_longitude').value;
+    /*let input_latitude = document.getElementById('input_latitude').value;
+    let input_longitude = document.getElementById('input_longitude').value;*/
+    let input_latitude = '37.733';
+    let input_longitude = '-122.447';
 
     console.log('User input latitude: ', input_latitude);
     console.log('User input longitude: ', input_longitude);
@@ -67,7 +69,7 @@ function hotelSubmission () {
     var req = new HotelRequest(resultFunction, hotel_request_args);
 }
 
-const restaurantSearchButton = document.querySelector("#btn_search_restaurants");
+const restaurantSearchButton = document.querySelector("#search-button");
 restaurantSearchButton.addEventListener('click', () => {
     console.log('Search button clicked...');
     restaurantSubmission();
@@ -95,4 +97,5 @@ function resultFunction (results, resultLength) {
         resultContainer.appendChild(tempDiv);
     }
 }
+
 
