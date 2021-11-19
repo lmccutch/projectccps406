@@ -87,6 +87,8 @@ $(function() {
 
 });
 
+
+//Not in use anymore
 function displayResults(data) {
 	// Add array elements in "data" to HTML. Parameter "n" is length of "data". 
 	const container = document.querySelector('#resultContainer');
@@ -140,8 +142,7 @@ function restaurantSubmission () {
 // Right now, it is resizing the output div based on the resultLength of only the restaurants
 // We need to change it so that it compares the length of all results, then chooses the largest one to resize, or we can just hardcode the output size to always be at max
 function resultFunction (results, resultLength) {
-
-    const resultContainer = document.querySelector('#resultContainer');
+    console.log(results);
     const outputDiv = document.querySelector("#output-section");
 
     if(resultLength >= 10) {
@@ -153,17 +154,38 @@ function resultFunction (results, resultLength) {
     }
 
     for (let i=0; i < resultLength && i < 10; i++) {
-        let tempDiv = document.createElement('div');
-        tempDiv.classname = 'resultDiv';
-        tempDiv.innerHTML = String((i+1) + ". " + results[i]['name']);
-        tempDiv.style.padding = "2.5px";
-        if(i % 2 != 0) {
-            tempDiv.style.backgroundColor = "rgba(52, 151, 125, 0.932)";
-        }
-        resultContainer.appendChild(tempDiv);
+        createDivRestaurant(results, i);
     }
 }
 
+function createDivRestaurant(results, counter) {
+    
+    const resultContainer = document.querySelector('#resultContainer');
+
+    let nameDiv = document.createElement('div');
+    nameDiv.class = "resultDiv";
+    nameDiv.innerHTML = String((counter+1) + ". " + results[counter]['name']);
+    nameDiv.style.padding = "2.5px";
+    if(counter % 2 != 0) {
+        nameDiv.style.backgroundColor = "rgba(52, 151, 125, 0.932)";
+    }
+
+    resultContainer.appendChild(nameDiv);
+
+    let addressDiv = document.createElement('div');
+    addressDiv.class = "addressDiv";
+    addressDiv.style.fontSize = "25px"
+    addressDiv.innerHTML = String(results[counter]['address']);
+
+    nameDiv.appendChild(addressDiv);
+
+    let distanceDiv = document.createElement('div');
+    distanceDiv.class = "distanceDiv";
+    distanceDiv.style.fontSize = "25px";
+    distanceDiv.innerHTML = String("Distance from You: " + parseFloat(results[counter]['distance']).toFixed(2) + "km");
+
+    nameDiv.appendChild(distanceDiv);
+}
 
 /* Request prototype object to inherit specific endpoint-based request objects to */
 class RapidApiRequest {
