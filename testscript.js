@@ -154,37 +154,71 @@ function resultFunction (results, resultLength) {
     }
 
     for (let i=0; i < resultLength && i < 10; i++) {
-        createDivRestaurant(results, i);
+        createDiv(results, i);
     }
 }
 
-function createDivRestaurant(results, counter) {
+function createDiv(results, counter) {
     
     const resultContainer = document.querySelector('#resultContainer');
 
-    let nameDiv = document.createElement('div');
-    nameDiv.class = "resultDiv";
-    nameDiv.innerHTML = String((counter+1) + ". " + results[counter]['name']);
-    nameDiv.style.padding = "2.5px";
-    if(counter % 2 != 0) {
-        nameDiv.style.backgroundColor = "rgba(52, 151, 125, 0.932)";
+    let nameDiv = new BuildNameDiv(results[counter]['name'], counter, resultContainer);
+    let addressDiv = new BuildAddressDiv(results[counter]['address'], counter, nameDiv.newDiv);
+    let distanceDiv = new BuildDistanceDiv(results[counter]['distance'], counter, nameDiv.newDiv);
+    
+}
+
+class BuildDiv {
+    constructor(info, number, parentDiv) {
+        this.info = info;
+        this.number = number;
+        this.parentDiv = parentDiv;
+
+        this.newDiv = document.createElement("div");
+        this.newDiv.class = "resultDiv";
+        this.newDiv.style.padding = "2.5px";
+
+        this.setInfo(info, number);
+
+        this.appendDiv(parentDiv);
     }
 
-    resultContainer.appendChild(nameDiv);
+    setInfo(info, number) {}
 
-    let addressDiv = document.createElement('div');
-    addressDiv.class = "addressDiv";
-    addressDiv.style.fontSize = "25px"
-    addressDiv.innerHTML = String(results[counter]['address']);
+    setFont() {
+        this.newDiv.style.fontSize = "25px"
+    }
 
-    nameDiv.appendChild(addressDiv);
+    appendDiv(parentDiv) {
+        parentDiv.appendChild(this.newDiv);
+    }
+}
 
-    let distanceDiv = document.createElement('div');
-    distanceDiv.class = "distanceDiv";
-    distanceDiv.style.fontSize = "25px";
-    distanceDiv.innerHTML = String("Distance from You: " + parseFloat(results[counter]['distance']).toFixed(2) + "km");
+class BuildNameDiv extends BuildDiv {
 
-    nameDiv.appendChild(distanceDiv);
+    setInfo(name, number) {
+        this.newDiv.innerHTML = String((number+1) + ". " + name);
+
+        if(number % 2 != 0) {
+            this.newDiv.style.backgroundColor = "rgba(52, 151, 125, 0.932)";
+        }
+    }
+}
+
+class BuildAddressDiv extends BuildDiv {
+
+    setInfo(address, number) {
+        this.setFont();
+        this.newDiv.innerHTML = String(address);
+    }
+}
+
+class BuildDistanceDiv extends BuildDiv {
+    
+    setInfo(distance, number) {
+        this.setFont();
+        this.newDiv.innerHTML = String("Distance from You: " + parseFloat(distance).toFixed(2) + "km");
+    }
 }
 
 /* Request prototype object to inherit specific endpoint-based request objects to */
