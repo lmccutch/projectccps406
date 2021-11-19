@@ -1,7 +1,7 @@
 
 /* Request prototype object to inherit specific endpoint-based request objects to */
 class RapidApiRequest {
-    constructor(action, args) {
+    constructor(args, action) {
         this.baseUrl = 'https://travel-advisor.p.rapidapi.com/'
         this.args = args
         this.action = action

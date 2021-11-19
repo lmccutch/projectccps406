@@ -135,6 +135,37 @@ function restaurantSubmission () {
     var req = new RestaurantRequest(resultFunction, restaurant_request_args);
 }
 
+class ResultSet {
+    constructor() {
+        this.restaurantData = None;
+        this.attractionData = None;
+        this.hotelData = None;    
+    }
+
+    storeRestaurantList(resultList) {
+        this.restaurantData = resultList;
+    }
+
+    storeAttractionList(resultList) {
+        this.attractionData = resultList;
+    }
+
+    storeHotelList(resultList) {
+        this.hotelData = resultList;
+    }
+
+    getRestaurantList() {
+        return this.restaurantData
+    }
+
+    getAttractionList() {
+        return this.attractionData
+    }
+
+    getHotelList() {
+        return this.hotelData
+    }
+}
 
 // When we add the other outputs, we need to call a single function to print them all
 // Right now, it is resizing the output div based on the resultLength of only the restaurants
