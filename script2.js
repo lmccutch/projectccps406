@@ -252,6 +252,11 @@ function hotelSubmission () {
 
 /* Write Data to page */
 function writeDataToPage() {
+    /* Turn this into a function with parameters so it can be called by the filtering module easily to reload filtered data? 
+       Also make this into 3 separate sub functions that are called by writeDataToPage to clean it up...
+    */
+
+    
     /* placeholder for now, have it call data from allResultSet and maybe 3 separate functions that write each type of data to page */
     const resultContainer = document.querySelector('#resultContainer');
     
