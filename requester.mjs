@@ -86,12 +86,11 @@ function responseHandler (action, response) {
     /* If response length is 0, no results. */
     if (resultLength == 0) {
         /* call the function to handle this "error". */
+        action(results, resultLength);
         noDataHandler();
-        console.log(response);
     } else {
         /* Perform actions on the resulting data. */
         action(results, resultLength);
-        dataHandler(results, resultLength);     /* Prints some data attributes in table format in console... */
     }
 }
 
@@ -99,6 +98,8 @@ function dataHandler (results, resultLength) {
     for (let i = 0; i < resultLength; i++) {
         let result = results[i];
         console.log(ljust(result['name'], 60) + ljust(result['address'], 60)  + ljust(result['distance'], 15));
+        console.log(results);
+        console.log(`Type of results object: ${typeof results}`);
     }
 }
 
