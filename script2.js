@@ -1,5 +1,5 @@
 /* Load map */
-/*
+
 function initMap() {
     var position = { lat: 43.658298, lng: -79.380783 };
     var map = new google.maps.Map(document.getElementById("map"), {
@@ -25,7 +25,7 @@ function initMap() {
         moveMap(parseFloat(pos[0]),parseFloat(pos[1]));
     }); 
 }
-*/
+
 
 /* hovering and button animation on click */
 $(function() {
