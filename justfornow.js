@@ -139,6 +139,7 @@ function convertToUniform(inputString, outputType) {
     }
 }
 
+
 function getInput(elementId, alertFieldName, desiredInputType, alertTypeRequest) {
     /* Get the value from a page element by element id, and ensure it is appropriate input type before accepting. */
     
@@ -159,6 +160,7 @@ function makeRequest () {
     console.log('Search button clicked... makeRequest called...')
     restaurantSubmission();
 }
+
 
 /* Submission functions */
 function restaurantSubmission () {
@@ -296,7 +298,7 @@ function writeDataToPage() {
     }
 
 
-    /* RESIZING ANNIMATION COMPLETED*/
+    /* RESIZING ANNIMATION COMPLETED */
     var newHeight = $(outputDiv).height();
     $(outputDiv).height(oldHeight);
     $(outputDiv).animate({height: newHeight});
@@ -305,6 +307,7 @@ function writeDataToPage() {
 }
 
 
+/* Creates the 3 Information Divs */
 function createDiv(results, counter, container) {
     
     const resultContainer = document.querySelector(container);
@@ -315,6 +318,8 @@ function createDiv(results, counter, container) {
     
 }
 
+
+/* Creates the Individual Divs */
 class BuildDiv {
     constructor(info, number, parentDiv) {
         this.info = info;
@@ -497,3 +502,91 @@ function ljust(str, n) {
         return str + ' '.repeat(n - str.length);
     }
 }
+
+class GeoCodeRequest {
+    constructor(action) {
+        /* Partial settings object here, will need subclasses to build and add in the GET url... */
+        
+        this.requestSettings = {
+            "url": 'https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyCiBk5KKCy9blhUxRGXjGbrLE1Ug7UTg_s',
+            "type": "GET",
+            "success": function(data) {
+                return data;                
+            },
+            "error": function(error) {
+                return error;
+            }
+        };
+
+        //this.buildUrl();
+        this.makePromise(this.requestSettings);
+        this.actOnPromise(action);
+    }
+
+    //buildUrl(args) {} /* Empty function to be overwritten in subclasses but exists here to call first in constructor. */
+
+    makePromise(requestSettings) {
+        this.promise = jqXhrPromise(requestSettings);        /* Request happens here. */
+    }
+    
+    actOnPromise(action) {
+        this.promise.then(function (response) {
+            console.log("this.promise.then called");
+            this.data = response;
+            responseHandler2(action, response);
+        });
+    }
+}
+
+function responseHandler2(action, response) {
+    /* Called by the anonymous AJAX function and handles all action on the API reponse.
+       Instead of printing to the console here*/
+    console.log(response);
+    let results = response['results']['0']['geometry']['location'];
+    let resultLength = /*0;*/results.length;
+    /* If response length is 0, no results. */
+    if (resultLength == 0) {
+        /* call the function to handle this "error". */
+        action(results, resultLength);
+        noDataHandler();
+    } else {
+        /* Perform actions on the resulting data. */
+        action(results, resultLength);
+    }
+}
+
+function findLatLng() {
+
+    var req = new GeoCodeRequest(function(results, resultLength) {
+        console.log(`resultLength is: ${resultLength}`);
+        console.log(results);
+        /* call the next request */
+    });
+
+}
+
+findLatLng();
+
+/*
+function findLatLng() {
+    var testLocation = '350 Victoria St, Toronto';
+
+    axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+        params: {
+            address: testLocation,
+            key: 'AIzaSyCiBk5KKCy9blhUxRGXjGbrLE1Ug7UTg_s',
+        }
+    })
+    .then(function(response) {
+        console.log(response.data.results[0].geometry.location);
+        latlng = response.data.results[0].geometry.location;
+    })
+    .catch(function(error) {
+        console.log(error);
+    });
+}
+
+latlng = findLatLng();
+
+console.log(latlng);
+*/
