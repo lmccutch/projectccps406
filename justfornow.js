@@ -504,26 +504,34 @@ function ljust(str, n) {
 }
 
 class GeoCodeRequest {
-    constructor(action) {
+    constructor(address, action) {
         /* Partial settings object here, will need subclasses to build and add in the GET url... */
-        
+        this.baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
+        this.apiKey = '+CA&key=AIzaSyCiBk5KKCy9blhUxRGXjGbrLE1Ug7UTg_s';
+        this.address = address;
+
         this.requestSettings = {
-            "url": 'https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyCiBk5KKCy9blhUxRGXjGbrLE1Ug7UTg_s',
+            //url goes here
             "type": "GET",
             "success": function(data) {
-                return data;                
+                return data;
             },
             "error": function(error) {
                 return error;
             }
         };
 
-        //this.buildUrl();
+        this.buildUrl(this.address);
         this.makePromise(this.requestSettings);
         this.actOnPromise(action);
     }
 
-    //buildUrl(args) {} /* Empty function to be overwritten in subclasses but exists here to call first in constructor. */
+    buildUrl (address) {
+        /* builds the Geocoding request url */
+        this.url = `${this.baseUrl}${address}${this.apiKey}`
+        this.requestSettings['url'] = this.url;
+        console.log(`Built Geo URL: ${this.url}`);
+    }
 
     makePromise(requestSettings) {
         this.promise = jqXhrPromise(requestSettings);        /* Request happens here. */
@@ -539,28 +547,18 @@ class GeoCodeRequest {
 }
 
 function responseHandler2(action, response) {
-    /* Called by the anonymous AJAX function and handles all action on the API reponse.
-       Instead of printing to the console here*/
+
     console.log(response);
     let results = response['results']['0']['geometry']['location'];
-    let resultLength = /*0;*/results.length;
-    /* If response length is 0, no results. */
-    if (resultLength == 0) {
-        /* call the function to handle this "error". */
-        action(results, resultLength);
-        noDataHandler();
-    } else {
-        /* Perform actions on the resulting data. */
-        action(results, resultLength);
-    }
+
+    action(results);
+
 }
 
 function findLatLng() {
 
-    var req = new GeoCodeRequest(function(results, resultLength) {
-        console.log(`resultLength is: ${resultLength}`);
+    var req = new GeoCodeRequest('350 Victoria St, Toronto, ON,', function(results) {
         console.log(results);
-        /* call the next request */
     });
 
 }
