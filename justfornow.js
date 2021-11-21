@@ -1,5 +1,4 @@
 /* Load map */
-
 function initMap() {
     var position = { lat: 43.658298, lng: -79.380783 };
     var map = new google.maps.Map(document.getElementById("map"), {
@@ -20,10 +19,19 @@ function initMap() {
     const goButton = document.querySelector('[data-go]');
 
     goButton.addEventListener('click', () => {
+        /*
         var streetInfo = document.querySelector('[data-street-info]').value;
         const pos = streetInfo.split(",");
-        moveMap(parseFloat(pos[0]),parseFloat(pos[1]));
-    }); 
+        moveMap(parseFloat(pos[0]),parseFloat(pos[1])); */
+        var streetInfo = document.querySelector('[data-street-info]').value;
+        var cityInfo = document.querySelector('[data-city-info]').value;
+        var provinceInfo = document.querySelector('[data-province-info]').value;
+
+        var address = `${streetInfo}, ${cityInfo}, ${provinceInfo},`;
+        console.log(address);
+
+        findLatLng(address, moveMap);
+    });
 }
 
 
@@ -142,7 +150,7 @@ function convertToUniform(inputString, outputType) {
 
 function getInput(elementId, alertFieldName, desiredInputType, alertTypeRequest) {
     /* Get the value from a page element by element id, and ensure it is appropriate input type before accepting. */
-    
+      
     var elementString = document.getElementById(elementId).value;
     var elementValue = convertToUniform(elementString, desiredInputType);
     while (elementValue == false) {
@@ -533,20 +541,20 @@ class GeoCodeRequest {
         console.log(`Built Geo URL: ${this.url}`);
     }
 
-    makePromise(requestSettings) {
+    makePromise (requestSettings) {
         this.promise = jqXhrPromise(requestSettings);        /* Request happens here. */
     }
     
-    actOnPromise(action) {
+    actOnPromise (action) {
         this.promise.then(function (response) {
             console.log("this.promise.then called");
             this.data = response;
-            responseHandler2(action, response);
+            responseHandlerLatLng(action, response);
         });
     }
 }
 
-function responseHandler2(action, response) {
+function responseHandlerLatLng (action, response) {
 
     console.log(response);
     let results = response['results']['0']['geometry']['location'];
@@ -555,36 +563,13 @@ function responseHandler2(action, response) {
 
 }
 
-function findLatLng() {
+function findLatLng(address, action) {
 
-    var req = new GeoCodeRequest('350 Victoria St, Toronto, ON,', function(results) {
-        console.log(results);
+    var req = new GeoCodeRequest(address, function(results) {
+        console.log(results['lat']);
+        console.log(results['lng']);
+        action(results['lat'], results['lng']);
     });
 
 }
 
-findLatLng();
-
-/*
-function findLatLng() {
-    var testLocation = '350 Victoria St, Toronto';
-
-    axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-        params: {
-            address: testLocation,
-            key: 'AIzaSyCiBk5KKCy9blhUxRGXjGbrLE1Ug7UTg_s',
-        }
-    })
-    .then(function(response) {
-        console.log(response.data.results[0].geometry.location);
-        latlng = response.data.results[0].geometry.location;
-    })
-    .catch(function(error) {
-        console.log(error);
-    });
-}
-
-latlng = findLatLng();
-
-console.log(latlng);
-*/
