@@ -119,3 +119,66 @@ function ljust(str, n) {
         return str + ' '.repeat(n - str.length);
     }
 }
+
+
+export class GeoCodeRequest {
+    constructor(address, action) {
+        /* Partial settings object here, will need subclasses to build and add in the GET url... */
+        this.baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
+        this.apiKey = '+CA&key=AIzaSyCiBk5KKCy9blhUxRGXjGbrLE1Ug7UTg_s';
+        this.address = address;
+
+        this.requestSettings = {
+            //url goes here
+            "type": "GET",
+            "success": function(data) {
+                return data;
+            },
+            "error": function(error) {
+                return error;
+            }
+        };
+
+        this.buildUrl(this.address);
+        this.makePromise(this.requestSettings);
+        this.actOnPromise(action);
+    }
+
+    buildUrl (address) {
+        /* builds the Geocoding request url */
+        this.url = `${this.baseUrl}${address}${this.apiKey}`
+        this.requestSettings['url'] = this.url;
+        console.log(`Built Geo URL: ${this.url}`);
+    }
+
+    makePromise (requestSettings) {
+        this.promise = jqXhrPromise(requestSettings);        /* Request happens here. */
+    }
+    
+    actOnPromise (action) {
+        this.promise.then(function (response) {
+            console.log("this.promise.then called");
+            this.data = response;
+            responseHandlerLatLng(action, response);
+        });
+    }
+}
+
+function responseHandlerLatLng (action, response) {
+
+    console.log(response);
+    let results = response['results']['0']['geometry']['location'];
+
+    action(results);
+
+}
+
+function findLatLng(address, action) {
+
+    var req = new GeoCodeRequest(address, function(results) {
+        console.log(results['lat']);
+        console.log(results['lng']);
+        action(results['lat'], results['lng']);
+    });
+
+}

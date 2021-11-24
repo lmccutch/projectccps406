@@ -27,7 +27,7 @@ function initMap() {
         moveMap(parseFloat(pos[0]),parseFloat(pos[1]));
     }); 
 }
-
+initMap();
 
 /* hovering and button animation on click */
 $(function() {
@@ -68,7 +68,7 @@ window.onload = function() {
 class ResultSet {
     constructor() {
         this.restaurantData = null;
-        this.restaurantDataLength = 10;
+        this.restaurantDataLength = 0;
         this.attractionData = null;
         this.attractionDataLength = 0;
         this.hotelData = null;
