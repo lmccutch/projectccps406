@@ -23,6 +23,7 @@ function initMap() {
     const goButton = document.querySelector('[data-go]');
 
     goButton.addEventListener('click', () => {
+
         var streetInfo = document.querySelector('[data-street-info]').value;
         var cityInfo = document.querySelector('[data-city-info]').value;
         var provinceInfo = document.querySelector('[data-province-info]').value;
@@ -32,17 +33,14 @@ function initMap() {
 
         findLatLng(address, moveMap);
 
-        //moveMap(userLocation['lat'], userLocation['lng']);
     });
 }
 initMap();
 
+function animate(buttons) {
+    $(buttons).append('<span></span>')
 
-/* hovering and button animation on click */
-$(function() {
-    $("#search-button").append('<span></span>')
-
-    $("#search-button").click(function(e) {
+    $(buttons).click(function(e) {
         var top = $(window).scrollTop() - $(this).offset().top + e.clientY;
         var left = $(window).scrollLeft() - $(this).offset().left + e.clientX;
 
@@ -54,13 +52,15 @@ $(function() {
         },500)
     });
 
-    $("#search-button").hover(function() {
+    $(buttons).hover(function() {
         $(this).css("background-color", "rgb(187, 59, 187)");
     }, function() {
         $(this).css("background-color", "rgb(255,255,255)");
     });
 
-});
+};
+$(animate("#search-button"));
+$(animate("#filter-button"));
 
 
 /* search button event listener */

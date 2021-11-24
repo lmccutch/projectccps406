@@ -112,6 +112,8 @@ input, select {
 
 html {
     height: auto;
+    max-width: 100%;
+    overflow-x: hidden;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -424,7 +426,7 @@ input:focus::placeholder {
 
 .specific-places {
     width: 100%;
-    height: calc(250px/3 - 10px);
+    height: calc(250px/4);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -432,8 +434,8 @@ input:focus::placeholder {
 
 .specific-places .places-prompt {
     font-family: Garamond;
-    font-size: 28px;
-    font-weight: 500;
+    font-size: 26px;
+    font-weight: 300;
     color: white;
     width: auto;
     float: left;
@@ -453,24 +455,24 @@ input:focus::placeholder {
     margin-left: 10px;
 }
 
-.currency {
+.distance {
     width: 100%;
-    height: calc(250px/3);
+    height: calc(250px/4);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.currency .currency-prompt {
+.distance .distance-prompt {
     font-family: Garamond;
-    font-size: 28px;
-    font-weight: 500;
+    font-size: 26px;
+    font-weight: 300;
     color: white;
     width: auto;
     float: left;
 }
 
-.currency > input {
+.distance > input {
     box-sizing: border-box;
     float: right;
     height: 40px;
@@ -484,24 +486,55 @@ input:focus::placeholder {
     margin-left: 10px;
 }
 
-.price-range {
+.num-rooms {
     width: 100%;
-    height: calc(250px/3 - 10px);
+    height: calc(250px/4);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.price-range .price-range-prompt {
+.num-rooms .num-rooms-prompt {
     font-family: Garamond;
-    font-size: 28px;
-    font-weight: 500;
+    font-size: 26px;
+    font-weight: 300;
     color: white;
     width: auto;
     float: left;
 }
 
-.price-range > input {
+.num-rooms > input {
+    box-sizing: border-box;
+    float: right;
+    height: 40px;
+    width: 25%; 
+    appearance: none;
+    border: none;
+    outline: none;
+    background: #f2f2f2;
+    border-radius: 3px;
+    padding-left: 10px;
+    margin-left: 10px;
+}
+
+.num-nights {
+    width: 100%;
+    height: calc(250px/4 - 5px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.num-nights .num-nights-prompt {
+    font-family: Garamond;
+    font-size: 26px;
+    font-weight: 300;
+    color: white;
+    width: auto;
+    float: left;
+}
+
+.num-nights > input {
     box-sizing: border-box;
     float: right;
     height: 40px;
@@ -530,6 +563,7 @@ input:focus::placeholder {
     position: relative;
     height: 90%;
     width: 40%;
+    margin-right: 15px;
     margin-bottom: 25px;
     background-color: rgb(255,255,255);
     outline: none;
@@ -550,6 +584,36 @@ input:focus::placeholder {
 }
 
 .search span.active {
+    animation: clickEffect 0.6s;
+}
+
+.section-places .filter {
+    box-sizing: border-box;
+    display: inline-block;
+    position: relative;
+    height: 90%;
+    width: 20%;
+    margin-left: 15px;
+    margin-bottom: 25px;
+    background-color: rgb(255,255,255);
+    outline: none;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    z-index: 1;
+    transition: .3s;
+}
+
+.filter span {
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    opacity: 0;
+    background: #ffffff;
+    border-radius: 50%;
+}
+
+.filter span.active {
     animation: clickEffect 0.6s;
 }
 
