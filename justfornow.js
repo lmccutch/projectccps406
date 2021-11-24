@@ -21,10 +21,6 @@ function initMap() {
     const goButton = document.querySelector('[data-go]');
 
     goButton.addEventListener('click', () => {
-        /*
-        var streetInfo = document.querySelector('[data-street-info]').value;
-        const pos = streetInfo.split(",");
-        moveMap(parseFloat(pos[0]),parseFloat(pos[1])); */
         var streetInfo = document.querySelector('[data-street-info]').value;
         var cityInfo = document.querySelector('[data-city-info]').value;
         var provinceInfo = document.querySelector('[data-province-info]').value;
