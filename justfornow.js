@@ -1,5 +1,7 @@
 import {RestaurantRequest, AttractionRequest, HotelRequest, GeoCodeRequest } from "./requester.mjs";
 
+let userLocation;
+
 /* Load map */
 function initMap() {
     var position = { lat: 43.658298, lng: -79.380783 };
@@ -29,19 +31,12 @@ function initMap() {
         console.log(address);
 
         findLatLng(address, moveMap);
+
+        //moveMap(userLocation['lat'], userLocation['lng']);
     });
 }
 initMap();
 
-function findLatLng(address, action) {
-
-    var req = new GeoCodeRequest(address, function(results) {
-        console.log(results['lat']);
-        console.log(results['lng']);
-        action(results['lat'], results['lng']);
-    });
-
-}
 
 /* hovering and button animation on click */
 $(function() {
@@ -67,6 +62,7 @@ $(function() {
 
 });
 
+
 /* search button event listener */
 window.onload = function() {
 
@@ -77,6 +73,7 @@ window.onload = function() {
         makeRequest();
     });
 }
+
 
 /* result set class to store search result data from all 3 endpoints until writing to page */
 class ResultSet {
@@ -145,8 +142,8 @@ class ResultSet {
 /* Create the all result data structure */
 const allResultSet = new ResultSet();
 
-/* Take input from page */
 
+/* Take input from page */
 function convertToUniform(inputString, outputType) {
     /* Turn an input string into the outputType where possible, otherwise return false. Meant for
        input strings that are uniform in type, i.e. won't work with an address with words and numbers. */
@@ -202,6 +199,11 @@ function makeRequest () {
 function restaurantSubmission () {
     /*let input_latitude = document.getElementById('input_latitude').value;
     let input_longitude = document.getElementById('input_longitude').value;*/
+
+
+    console.log('User Location', userLocation);    // Now we can just refer to the global variable: User Location, to getLat Lng for API request
+
+
     let input_latitude = '37.733';
     let input_longitude = '-122.447';
 
@@ -284,7 +286,6 @@ function hotelSubmission () {
 /* Store data functions */
 
 
-
 function writeDataToPageInitialCallWrapper() {
     /* simple wrapper function to make the first call with the initial allResultSet data */
     writeDataToPage(
@@ -296,7 +297,6 @@ function writeDataToPageInitialCallWrapper() {
         allResultSet.getHotelLength()
     );
 }
-
 
 
 /* Write Data to page */
@@ -333,7 +333,6 @@ function writeDataToPage(restaurantResults,
 
     console.log('Write data function reached end...');
 }
-
 
 
 /* Creates the 3 Information Divs */
@@ -406,5 +405,23 @@ class BuildDistanceDiv extends BuildDiv {
 /* Clear data from page / reset page */
 
 
+/* Finds Latitude and Longitude based on Address */
+function findLatLng(address, action) {
+
+    var req = new GeoCodeRequest(address, function(results) {
+        console.log(results['lat']);
+        console.log(results['lng']);
+        storeLatLng(results, action);
+    });
+
+}
 
 
+/* Stores Lat and Lng */
+function storeLatLng(latlng, action) {
+    userLocation = latlng;
+    console.log("storeLatLng has been Called...")
+    console.log(userLocation);
+
+    action(userLocation['lat'], userLocation['lng']);
+} 
