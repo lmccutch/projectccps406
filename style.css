@@ -95,15 +95,6 @@ input, select {
 
 
 
-
-
-
-
-
-
-
-
-
 /* MY CODE */
 
 * {
@@ -119,13 +110,13 @@ html {
     -o-background-size: cover;
     background-size: cover;
     background-repeat:no-repeat;
-    background: #c3dbf1;
+    background: white;
 }
 
 header {
     width: 100%;
     height: 100px;
-    background-color: white;
+    background-color: grey;
     position: relative;
 }
 
@@ -139,7 +130,7 @@ header .header-brand {
     font-size: 50px;
     font-weight: 900;
     display: block;
-    color: #393939;
+    color: black;
     text-align: left;
     float: left;
     margin: 10px 0% 10px 7%;
@@ -163,7 +154,7 @@ header .slogan {
     margin: 15px 0 0 0;
     width: 51%;
     height: 450px;
-    background-color: rgba(31, 143, 241, 0.3);
+    background-color: rgba(95, 93, 133, 0.295);;
     float: left;
 }
 
@@ -182,9 +173,9 @@ header .slogan {
 
 .input-street .prompt {
     font-family: Garamond;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 250;
-    color: white;
+    color: black;
     float: left;
     width: auto;
     padding-top: 42px;
@@ -202,9 +193,9 @@ header .slogan {
 
 .input-city .prompt {
     font-family: Garamond;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 250;
-    color: white;
+    color: black;
     float: left;
     width: auto;
     padding-top: 42px;
@@ -221,9 +212,9 @@ header .slogan {
 
 .input-province .prompt {
     font-family: Garamond;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 250;
-    color: white;
+    color: black;
     float: left;
     width: auto;
     padding-top: 42px;
@@ -304,12 +295,12 @@ input:focus::placeholder {
 }
 
 .go:hover {
-    background: rgb(117, 147, 248) radial-gradient(circle, transparent 1%, rgb(117, 147, 248) 1%) center/15000%;
-    border: rgb(117, 147, 248);
+    background: rgb(31, 209, 241) radial-gradient(circle, transparent 1%, rgb(31, 209, 241) 1%) center/15000%;
+    borderrgb(31, 209, 241);
 }
 
 .go:active {
-    background-color: #ffffff;
+    background-color: #ffffff; 
     background-size: 100%;
     transition: background 0s;
 }
@@ -319,7 +310,7 @@ input:focus::placeholder {
     margin-bottom: 1%;
     width: 100%;
     height: 340px;
-    background-color: rgba(131, 64, 207, 0.3);
+    background-color: rgba(31, 209, 241, 0.356);
     float: left;
 }
 
@@ -330,9 +321,9 @@ input:focus::placeholder {
 
 .title-block-2 {
     font-family: Garamond;
-    font-size: 45px;
+    font-size: 28px;
     font-weight: 250;
-    color: white;
+    color: black;
     float: left;
     width: auto;
     padding-top: 20px;
@@ -354,7 +345,7 @@ input:focus::placeholder {
     appearance: none;
     height: 40px;
     width: 40px;
-    background-color: #b6f3e1;
+    background-color: white;
     border-radius: 3px;
     margin-left: 20px;
     cursor: pointer;
@@ -374,11 +365,11 @@ input:focus::placeholder {
 }
 
 .check:hover {
-    background-color: #43ddaf;
+    background-color: rgb(31, 182, 241);;
 }
 
 .check:checked {
-    background-color: #43ddaf;
+    background-color: rgb(31, 182, 241);;
 }
 
 .check:checked:after {
@@ -410,7 +401,7 @@ input:focus::placeholder {
     font-family: Garamond;
     font-size: 22px;
     font-weight: 300;
-    color: white;
+    color: black;
     width: auto;
     padding-top: 10px;
     padding-left: 10px;
@@ -434,9 +425,9 @@ input:focus::placeholder {
 
 .specific-places .places-prompt {
     font-family: Garamond;
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 300;
-    color: white;
+    color: black;
     width: auto;
     float: left;
 }
@@ -465,9 +456,9 @@ input:focus::placeholder {
 
 .distance .distance-prompt {
     font-family: Garamond;
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 300;
-    color: white;
+    color: black;
     width: auto;
     float: left;
 }
@@ -496,9 +487,9 @@ input:focus::placeholder {
 
 .num-rooms .num-rooms-prompt {
     font-family: Garamond;
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 300;
-    color: white;
+    color: black;
     width: auto;
     float: left;
 }
@@ -527,9 +518,9 @@ input:focus::placeholder {
 
 .num-nights .num-nights-prompt {
     font-family: Garamond;
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 300;
-    color: white;
+    color: black;
     width: auto;
     float: left;
 }
@@ -634,7 +625,7 @@ input:focus::placeholder {
     width: 100%;
     height: auto;
 /*    height: 340px; */
-    background-color: rgba(64, 207, 171, 0.932);
+    background-color: rgba(64, 207, 171, 0.322);
     float: left;
 }
 
@@ -645,9 +636,9 @@ input:focus::placeholder {
 
 .result-header {
     font-family: Garamond;
-    font-size: 45px;
+    font-size: 28px;
     font-weight: 250;
-    color: white;
+    color: black;
     float: left;
     width: 100vw;
     padding-top: 20px;
