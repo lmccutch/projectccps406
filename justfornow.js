@@ -347,9 +347,9 @@ function createDivSet(results, counter, container) {
     
     const resultContainer = document.querySelector(container);
 
-    let nameDiv = new BuildNameDiv(results[counter]['name'], counter, resultContainer);
-    let addressDiv = new BuildAddressDiv(results[counter]['address'], counter, nameDiv.newDiv);
-    let distanceDiv = new BuildDistanceDiv(results[counter]['distance'], counter, nameDiv.newDiv);
+    let nameDiv = new BuildNameDiv(results[counter]['name'], counter, resultContainer, parseFloat(results[counter]['latitude']), parseFloat(results[counter]['longitude']));
+    let addressDiv = new BuildAddressDiv(results[counter]['address'], counter, nameDiv.newDiv, parseFloat(results[counter]['latitude']), parseFloat(results[counter]['longitude']));
+    let distanceDiv = new BuildDistanceDiv(results[counter]['distance'], counter, nameDiv.newDiv, parseFloat(results[counter]['latitude']), parseFloat(results[counter]['longitude']));
     
 }
 
@@ -366,10 +366,16 @@ function createHeaderDiv(headerName, container) {
 
 /* Creates the Individual Divs */
 class BuildDiv {
-    constructor(info, number, parentDiv) {
+    constructor(info, number, parentDiv, latitude, longitude) {
         this.info = info;
         this.number = number;
         this.parentDiv = parentDiv;
+
+        this.latitude = latitude;
+        this.longitude = longitude;
+        console.log('OBJECT lat/lng:');
+        console.log(this.latitude);
+        console.log(this.longitude);
 
         this.newDiv = document.createElement("div");
         this.newDiv.class = "resultDiv";
@@ -381,7 +387,7 @@ class BuildDiv {
         this.appendDiv(parentDiv);
     }
 
-    setInfo(info, number) {}
+    setInfo(info, number, results) {}
 
     smallFont() {
         this.newDiv.style.fontSize = "25px"
@@ -401,17 +407,21 @@ class BuildNameDiv extends BuildDiv {
             this.newDiv.style.backgroundColor = "rgba(52, 151, 125, 0.932)";
         }
 
-        //this.newDiv.addEventListener('mouseover', () => {
-        //    this.newDiv.style.outline = "1px solid red";
-        //});
-
         $(this.newDiv).hover(function() {
             $(this).css("outline", "3px solid blue");
         }, function() {
             $(this).css("outline", "0px");
         });
 
-        
+        this.newDiv.addEventListener('click', () => {
+            console.log('CLICKED!!!!');
+            console.log(this.latitude);
+            console.log(this.longitude);
+            new google.maps.Marker({
+                position: {lat: this.latitude, lng: this.longitude},
+                map: map
+            });
+        });
 
     }
 }
