@@ -118,6 +118,17 @@ class ResultSet {
     getHotelLength() {
         return this.hotelDataLength;
     }
+    getAllResults() {
+        let allResultsJSON = {
+            "restaurantData":   this.getRestaurantList(),
+            "restaurantLength": this.getRestaurantLength(),
+            "attractionData":   this.getAttractionList(),
+            "attractionLength": this.getAttractionLength(),
+            "hotelData":        this.getHotelList(),
+            "hotelLength":      this.getHotelLength()
+        }
+        return allResultsJSON;
+    }
     removeUndefined(results, resultLength) {
         let validResults = [];
         let resultsUndefined = 0;
@@ -142,6 +153,35 @@ class ResultSet {
 /* Create the all result data structure */
 const allResultSet = new ResultSet();
 
+/* Object to handle page state for result writing, etc */
+class Page {
+    constructor() {
+        this.userLocation = null
+        this.resultsOnPage = false;
+    }
+    setResultsOnPage () {
+        this.resultsOnPage = true;
+    }
+    resetResultsOnPage () {
+        this.resultsOnPage = false;
+    }
+    isResultsOnPage() {
+        if (this.resultsOnPage == true) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    setUserLocation (lat, long) {
+        this.userLocation = (lat, long);
+    }
+    getUserLocation () {
+        return this.userLocation;
+    }
+}
+
+const page = new Page();
 
 /* Take input from page */
 function convertToUniform(inputString, outputType) {
@@ -172,18 +212,17 @@ function convertToUniform(inputString, outputType) {
     }
 }
 
-
 function getInput(elementId, alertFieldName, desiredInputType, alertTypeRequest) {
     /* Get the value from a page element by element id, and ensure it is appropriate input type before accepting. */
       
     var elementString = document.getElementById(elementId).value;
     var elementValue = convertToUniform(elementString, desiredInputType);
-    while (elementValue == false) {
+    if (elementValue == false) {
         alert(`Please only enter ${alertTypeRequest} into the ${alertFieldName} field.`);
-        elementString = document.getElementById(elementId).value;
-        elementValue = convertToUniform(elementString, desiredInputType);
+    }
+    else {
+        return elementValue;
     };
-    return elementValue;
 }
 
 
@@ -401,9 +440,56 @@ class BuildDistanceDiv extends BuildDiv {
     }
 }
 
+/* Filtering functionality */
+
+/* Define filtering buttons/fields/checkboxes */
+const filterButton = document.querySelector("filter");
+filterButton.addEventListener('click', () => {
+    console.log('Filter button clicked...');
+    filterResults();
+});
+
+const checkbox_weather   = document.querySelector(".weather");
+const checkbox_distance  = document.querySelector(".distance");
+const checkbox_rating    = document.querySelector(".cheapest"); /* change id name?? */
+const checkbox_open      = document.querySelector(".open");
+
+function pullFilterArgs () {
+    /* pull all the current filtering values, and return them in json to be passed to filtering module */
+    let getFilterArgs = {
+        "inputField_keyword":     getInput("input-filter-for", "Filter For", String, "words"),
+        "inputField_maxDistance": getInput("input-max-distance", "Maximum Distance Away", Number, "number"),
+        "inputField_numRooms":    getInput("input-num-rooms", "Number of Rooms", Number, "number"),
+        "inputField_numNights":   getInput("input-num-nights", "Number of Nights", Number, "number"),
+        "checkbox_weather":       checkbox_weather.value,
+        "checkbox_distance":      checkbox_distance.value,
+        "checkbox_rating":        checkbox_rating.value,
+        "checkbox_open":          checkbox_open.value
+    }
+}
+
+function filterResults () {
+    /* Pulls data from allResultSet object, if resultsOnPage flag=True then clears page, calls filtering algorithms,
+       then calls writeToPage with the new data. */
+    if (page.isResultsOnPage() == true) {
+        clearResults();
+    }
+    /* Read in all of the filtering inputs from the page (max, min, checkbox bools) */
+    let filterArgs = getFilterArgs();
+
+    /* get results from allResultsSet */
+    let allResultsJSON = allResultSet.getAllResults();
+}
 
 /* Clear data from page / reset page */
-
+function clearResults() {
+    /* clears all search results from page, and resets the "page" object that tracks if results are on the page to false once cleared. */
+    let allResultDivs = document.querySelectorAll('#resultDiv');
+    allResultDivs.forEach((oneResultDiv) => {
+        oneResultDiv.remove();
+    })
+    page.resetResultsOnPage();
+}
 
 /* Finds Latitude and Longitude based on Address */
 function findLatLng(address, action) {
