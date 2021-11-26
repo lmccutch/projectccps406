@@ -5,7 +5,7 @@ let userLocation;
 /* Load map */
 function initMap() {
     var position = { lat: 43.658298, lng: -79.380783 };
-    var map = new google.maps.Map(document.getElementById("map"), {
+    window.map = new google.maps.Map(document.getElementById("map"), {
         zoom: 16,
         center: position
     });
@@ -37,6 +37,8 @@ function initMap() {
 }
 initMap();
 
+
+/* Ripple Effect and Hover Animation on buttons */
 function animate(buttons) {
     $(buttons).append('<span></span>')
 
@@ -346,23 +348,28 @@ function writeDataToPage(restaurantResults,
     hotelResults,
     hotelResultLength) {
 
-    /* RESIZING ANNIMATION*/
+    /* RESIZING ANNIMATION */
     const outputDiv = document.querySelector("#output-section");
     var oldHeight = $(outputDiv).height();
 
     /* RESTAURANTS */
+    //const resultContainer = document.querySelector('#resultContainerRestuarants');
+    //let headerDiv = new BuildNameDiv('Restaurants: ', 1, resultContainer);
+    createHeaderDiv('Restaurants:', '#resultContainerRestuarants');
     for (let i=0; i < restaurantResultLength && i < 10; i++) {
-        createDiv(restaurantResults, i, '#resultContainerRestuarants');
+        createDivSet(restaurantResults, i, '#resultContainerRestuarants');
     }
 
     /* ATTRACTIONS */
+    createHeaderDiv('Attractions:', '#resultContainerAttractions');
     for (let i=0; i < attractionResultLength && i < 10; i++) {
-        createDiv(attractionResults, i, '#resultContainerAttractions');
+        createDivSet(attractionResults, i, '#resultContainerAttractions');
     }
 
     /* HOTELS */
+    createHeaderDiv('Hotels:', '#resultContainerHotels');
     for (let i=0; i < hotelResultLength && i < 10; i++) {
-        createDiv(hotelResults, i, '#resultContainerHotels');
+        createDivSet(hotelResults, i, '#resultContainerHotels');
     }
 
     /* RESIZING ANNIMATION COMPLETED */
@@ -375,7 +382,7 @@ function writeDataToPage(restaurantResults,
 
 
 /* Creates the 3 Information Divs */
-function createDiv(results, counter, container) {
+function createDivSet(results, counter, container) {
     
     const resultContainer = document.querySelector(container);
 
@@ -383,6 +390,16 @@ function createDiv(results, counter, container) {
     let addressDiv = new BuildAddressDiv(results[counter]['address'], counter, nameDiv.newDiv);
     let distanceDiv = new BuildDistanceDiv(results[counter]['distance'], counter, nameDiv.newDiv);
     
+}
+
+function createHeaderDiv(headerName, container) {
+    const resultContainer = document.querySelector(container);
+
+    let headerDiv = document.createElement("div");
+    headerDiv.class = "resultDiv";
+    headerDiv.style.padding = "2.5px";
+    headerDiv.innerHTML = String(headerName);
+    resultContainer.appendChild(headerDiv);
 }
 
 
@@ -396,6 +413,7 @@ class BuildDiv {
         this.newDiv = document.createElement("div");
         this.newDiv.class = "resultDiv";
         this.newDiv.style.padding = "2.5px";
+        this.newDiv.style.transition = ".1s ease";
 
         this.setInfo(info, number);
 
@@ -404,7 +422,7 @@ class BuildDiv {
 
     setInfo(info, number) {}
 
-    setFont() {
+    smallFont() {
         this.newDiv.style.fontSize = "25px"
     }
 
@@ -421,13 +439,26 @@ class BuildNameDiv extends BuildDiv {
         if(number % 2 != 0) {
             this.newDiv.style.backgroundColor = "rgba(52, 151, 125, 0.932)";
         }
+
+        //this.newDiv.addEventListener('mouseover', () => {
+        //    this.newDiv.style.outline = "1px solid red";
+        //});
+
+        $(this.newDiv).hover(function() {
+            $(this).css("outline", "3px solid blue");
+        }, function() {
+            $(this).css("outline", "0px");
+        });
+
+        
+
     }
 }
 
 class BuildAddressDiv extends BuildDiv {
 
     setInfo(address, number) {
-        this.setFont();
+        this.smallFont();
         this.newDiv.innerHTML = String(address);
     }
 }
@@ -435,7 +466,7 @@ class BuildAddressDiv extends BuildDiv {
 class BuildDistanceDiv extends BuildDiv {
     
     setInfo(distance, number) {
-        this.setFont();
+        this.smallFont();
         this.newDiv.innerHTML = String("Distance from You: " + parseFloat(distance).toFixed(2) + "km");
     }
 }

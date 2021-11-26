@@ -296,7 +296,7 @@ input:focus::placeholder {
 
 .go:hover {
     background: rgb(31, 209, 241) radial-gradient(circle, transparent 1%, rgb(31, 209, 241) 1%) center/15000%;
-    borderrgb(31, 209, 241);
+    border: rgb(31, 209, 241);
 }
 
 .go:active {
@@ -652,7 +652,7 @@ input:focus::placeholder {
     font-family: Garamond;
     font-size: 40px;
     font-weight: 100;
-    color: white;
+    color: black;
     float: left;
     justify-content: left;
     align-items: left;
@@ -666,7 +666,7 @@ input:focus::placeholder {
     font-family: Garamond;
     font-size: 40px;
     font-weight: 100;
-    color: white;
+    color: black;
     float: left;
     justify-content: left;
     align-items: left;
@@ -680,7 +680,7 @@ input:focus::placeholder {
     font-family: Garamond;
     font-size: 40px;
     font-weight: 100;
-    color: white;
+    color: black;
     float: left;
     justify-content: left;
     align-items: left;

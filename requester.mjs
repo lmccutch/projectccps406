@@ -13,7 +13,7 @@ class RapidApiRequest {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "travel-advisor.p.rapidapi.com",
-                "x-rapidapi-key": "1294628978msh4b6db514ef27f9dp1f545fjsn10a9af8ff144"
+                "x-rapidapi-key": "3ecb09acd1msh8dfa15a23d19668p1b9e18jsn63624e3a5c66"  //"1294628978msh4b6db514ef27f9dp1f545fjsn10a9af8ff144" Previous Key
             },
             "success": function(data) {
                 return data;                
