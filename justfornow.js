@@ -363,6 +363,7 @@ function createHeaderDiv(headerName, container) {
     resultContainer.appendChild(headerDiv);
 }
 
+
 /* Creates the Individual Divs */
 class BuildDiv {
     constructor(info, number, parentDiv) {
@@ -373,6 +374,7 @@ class BuildDiv {
         this.newDiv = document.createElement("div");
         this.newDiv.class = "resultDiv";
         this.newDiv.style.padding = "2.5px";
+        this.newDiv.style.transition = ".1s ease";
 
         this.setInfo(info, number);
 
@@ -398,7 +400,17 @@ class BuildNameDiv extends BuildDiv {
         if(number % 2 != 0) {
             this.newDiv.style.backgroundColor = "rgba(52, 151, 125, 0.932)";
         }
-        
+
+        //this.newDiv.addEventListener('mouseover', () => {
+        //    this.newDiv.style.outline = "1px solid red";
+        //});
+
+        $(this.newDiv).hover(function() {
+            $(this).css("outline", "3px solid blue");
+        }, function() {
+            $(this).css("outline", "0px");
+        });
+
     }
 }
 
