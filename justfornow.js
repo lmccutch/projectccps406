@@ -1,6 +1,5 @@
 import {RestaurantRequest, AttractionRequest, HotelRequest, GeoCodeRequest } from "./requester.mjs";
 
-let userLocation;
 
 /* Load map */
 function initMap() {
@@ -175,8 +174,8 @@ class Page {
             return false;
         }
     }
-    setUserLocation (lat, long) {
-        this.userLocation = (lat, long);
+    setUserLocation (lati, long) {
+        this.userLocation = {lat: lati, lng: long};
     }
     getUserLocation () {
         return this.userLocation;
@@ -242,7 +241,7 @@ function restaurantSubmission () {
     let input_longitude = document.getElementById('input_longitude').value;*/
 
 
-    console.log('User Location', userLocation);    // Now we can just refer to the global variable: User Location, to getLat Lng for API request
+    console.log('User Location = ', page.getUserLocation());    // Now we can just refer to the page Object via getUserLocation() to get LatLng for API request
 
 
     let input_latitude = '37.733';
@@ -357,19 +356,19 @@ function writeDataToPage(restaurantResults,
     //let headerDiv = new BuildNameDiv('Restaurants: ', 1, resultContainer);
     createHeaderDiv('Restaurants:', '#resultContainerRestuarants');
     for (let i=0; i < restaurantResultLength && i < 10; i++) {
-        createDivSet(restaurantResults, i, '#resultContainerRestuarants');
+        createDivSet(restaurantResults, i, '#resultContainerRestuarants', 'R');
     }
 
     /* ATTRACTIONS */
     createHeaderDiv('Attractions:', '#resultContainerAttractions');
     for (let i=0; i < attractionResultLength && i < 10; i++) {
-        createDivSet(attractionResults, i, '#resultContainerAttractions');
+        createDivSet(attractionResults, i, '#resultContainerAttractions', 'A');
     }
 
     /* HOTELS */
     createHeaderDiv('Hotels:', '#resultContainerHotels');
     for (let i=0; i < hotelResultLength && i < 10; i++) {
-        createDivSet(hotelResults, i, '#resultContainerHotels');
+        createDivSet(hotelResults, i, '#resultContainerHotels', 'H');
     }
 
     /* RESIZING ANNIMATION COMPLETED */
@@ -382,13 +381,15 @@ function writeDataToPage(restaurantResults,
 
 
 /* Creates the 3 Information Divs */
-function createDivSet(results, counter, container) {
+function createDivSet(results, counter, container, type) {
     
     const resultContainer = document.querySelector(container);
+    let lat = parseFloat(results[counter]['latitude']);
+    let long = parseFloat(results[counter]['longitude'])
 
-    let nameDiv = new BuildNameDiv(results[counter]['name'], counter, resultContainer, parseFloat(results[counter]['latitude']), parseFloat(results[counter]['longitude']));
-    let addressDiv = new BuildAddressDiv(results[counter]['address'], counter, nameDiv.newDiv, parseFloat(results[counter]['latitude']), parseFloat(results[counter]['longitude']));
-    let distanceDiv = new BuildDistanceDiv(results[counter]['distance'], counter, nameDiv.newDiv, parseFloat(results[counter]['latitude']), parseFloat(results[counter]['longitude']));
+    let nameDiv = new BuildNameDiv(results[counter]['name'], counter, resultContainer, lat, long, type);
+    let addressDiv = new BuildAddressDiv(results[counter]['address'], counter, nameDiv.newDiv, lat, long, type);
+    let distanceDiv = new BuildDistanceDiv(results[counter]['distance'], counter, nameDiv.newDiv, lat, long, type);
     
 }
 
@@ -405,21 +406,20 @@ function createHeaderDiv(headerName, container) {
 
 /* Creates the Individual Divs */
 class BuildDiv {
-    constructor(info, number, parentDiv, latitude, longitude) {
+    constructor(info, number, parentDiv, latitude, longitude, type) {
+
         this.info = info;
         this.number = number;
         this.parentDiv = parentDiv;
+        this.type = type;
 
         this.latitude = latitude;
         this.longitude = longitude;
-        console.log('OBJECT lat/lng:');
-        console.log(this.latitude);
-        console.log(this.longitude);
 
         this.newDiv = document.createElement("div");
         this.newDiv.class = "resultDiv";
         this.newDiv.style.padding = "2.5px";
-        this.newDiv.style.transition = ".1s ease";
+        this.newDiv.style.transition = ".075s ease";
 
         this.setInfo(info, number);
 
@@ -435,6 +435,18 @@ class BuildDiv {
     appendDiv(parentDiv) {
         parentDiv.appendChild(this.newDiv);
     }
+
+    chooseIcon(type) {
+        if(this.type == 'R') {
+            return 'blue_MarkerR.png'
+        }
+        else if(this.type == 'A') {
+            return 'darkgreen_MarkerA.png'
+        }
+        else {
+            return 'purple_MarkerH.png'
+        }
+    }
 }
 
 class BuildNameDiv extends BuildDiv {
@@ -443,11 +455,12 @@ class BuildNameDiv extends BuildDiv {
         this.newDiv.innerHTML = String((number+1) + ". " + name);
 
         if(number % 2 != 0) {
-            this.newDiv.style.backgroundColor = "rgba(52, 151, 125, 0.932)";
+            this.newDiv.style.backgroundColor = "rgba(52, 151, 125, 0.7)";
         }
 
         $(this.newDiv).hover(function() {
-            $(this).css("outline", "3px solid blue");
+            $(this).css("outline", "3px solid rgb(48, 129, 238)");
+            $(this).css("cursor", "pointer");
         }, function() {
             $(this).css("outline", "0px");
         });
@@ -458,8 +471,10 @@ class BuildNameDiv extends BuildDiv {
             console.log(this.longitude);
             new google.maps.Marker({
                 position: {lat: this.latitude, lng: this.longitude},
-                map: map
+                map: map,
+                icon: this.chooseIcon()
             });
+            map.panTo({lat: this.latitude, lng: this.longitude});
         });
 
     }
@@ -546,9 +561,9 @@ function findLatLng(address, action) {
 
 /* Stores Lat and Lng */
 function storeLatLng(latlng, action) {
-    userLocation = latlng;
-    console.log("storeLatLng has been Called...")
-    console.log(userLocation);
+    page.setUserLocation(latlng['lat'], latlng['lng']);
+    console.log("storeLatLng has been Called...");
+    console.log(page.getUserLocation());
 
-    action(userLocation['lat'], userLocation['lng']);
+    action(latlng['lat'], latlng['lng']);
 } 

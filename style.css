@@ -103,8 +103,6 @@ input, select {
 
 html {
     height: auto;
-    max-width: 100%;
-    overflow-x: hidden;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
