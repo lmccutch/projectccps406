@@ -388,11 +388,31 @@ function writeDataToPage(restaurantResults,
     }
 
     /* RESIZING ANNIMATION COMPLETED */
-    var newHeight = $(page.resultSection).height();
+    var newHeight = findLargestDiv() + 100;
     $(page.resultSection).height(oldHeight);
     $(page.resultSection).animate({height: newHeight});
 
     console.log('Write data function reached end...');
+}
+
+function findLargestDiv() {
+    const restaurantContainer = document.querySelector('#resultContainerRestuarants');
+    const attractionsContainer = document.querySelector('#resultContainerAttractions');
+    const hotelContainer = document.querySelector('#resultContainerHotels');
+
+    var heightRestaurant = $(restaurantContainer).height();
+    var heightAttraction = $(attractionsContainer).height();
+    var heightHotel = $(hotelContainer).height();
+
+    if(heightRestaurant >= heightAttraction && heightRestaurant >= heightHotel) {
+        return heightRestaurant;
+    }
+    else if(heightAttraction >= heightRestaurant && heightAttraction >= heightHotel) {
+        return heightAttraction;
+    }
+    else {
+        return heightHotel;
+    }
 }
 
 
