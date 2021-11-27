@@ -633,14 +633,27 @@ input:focus::placeholder {
 }
 
 .result-header {
+    box-sizing: border-box;
     font-family: Garamond;
     font-size: 28px;
     font-weight: 250;
     color: black;
     float: left;
-    width: 100vw;
+    width: 66%;
     padding-top: 20px;
     padding-left: 20px;
+}
+
+.reset {
+    box-sizing: border-box;
+    font-family: Garamond;
+    font-size: 28px;
+    font-weight: 250;
+    width: 33%;
+    padding-top: 20px;
+    text-align: center;
+    text-decoration: underline;
+    float: right;
 }
 
 #resultContainerRestuarants {

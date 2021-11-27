@@ -64,6 +64,13 @@ $(animate("#search-button"));
 $(animate("#filter-button"));
 
 
+function removeResultDivs() {
+    var elements = document.getElementsByClassName("resultDiv");
+    while(elements.length > 0) {
+        elements[0].parentNode.removeChild(elements[0]);
+    }
+}
+
 /* search button event listener */
 window.onload = function() {
 
@@ -71,7 +78,17 @@ window.onload = function() {
     
     searchButton.addEventListener('click', () => {
         console.log('Search button clicked...');
-        makeRequest();
+        makeRequest();   //We need to use the page object to stop requests if there is already inputs
+    });
+
+    const resetButton = document.querySelector("#reset-button");
+    
+    resetButton.addEventListener('click', () => {
+        console.log('Reset button clicked...');
+        initMap();   //Resets Map
+        removeResultDivs();   //Removes all results on screen
+
+        $(page.resultSection).animate({height: '100px'});
     });
 }
 
@@ -159,6 +176,7 @@ class Page {
     constructor() {
         this.userLocation = null
         this.resultsOnPage = false;
+        this.resultSection = document.querySelector("#output-section");
     }
     setResultsOnPage () {
         this.resultsOnPage = true;
@@ -348,12 +366,10 @@ function writeDataToPage(restaurantResults,
     hotelResultLength) {
 
     /* RESIZING ANNIMATION */
-    const outputDiv = document.querySelector("#output-section");
-    var oldHeight = $(outputDiv).height();
+    //var outputDiv = document.querySelector("#output-section");
+    var oldHeight = $(page.resultSection).height();
 
     /* RESTAURANTS */
-    //const resultContainer = document.querySelector('#resultContainerRestuarants');
-    //let headerDiv = new BuildNameDiv('Restaurants: ', 1, resultContainer);
     createHeaderDiv('Restaurants:', '#resultContainerRestuarants');
     for (let i=0; i < restaurantResultLength && i < 10; i++) {
         createDivSet(restaurantResults, i, '#resultContainerRestuarants', 'R');
@@ -372,9 +388,9 @@ function writeDataToPage(restaurantResults,
     }
 
     /* RESIZING ANNIMATION COMPLETED */
-    var newHeight = $(outputDiv).height();
-    $(outputDiv).height(oldHeight);
-    $(outputDiv).animate({height: newHeight});
+    var newHeight = $(page.resultSection).height();
+    $(page.resultSection).height(oldHeight);
+    $(page.resultSection).animate({height: newHeight});
 
     console.log('Write data function reached end...');
 }
@@ -397,7 +413,7 @@ function createHeaderDiv(headerName, container) {
     const resultContainer = document.querySelector(container);
 
     let headerDiv = document.createElement("div");
-    headerDiv.class = "resultDiv";
+    headerDiv.classList.add("resultDiv");
     headerDiv.style.padding = "2.5px";
     headerDiv.innerHTML = String(headerName);
     resultContainer.appendChild(headerDiv);
@@ -417,7 +433,7 @@ class BuildDiv {
         this.longitude = longitude;
 
         this.newDiv = document.createElement("div");
-        this.newDiv.class = "resultDiv";
+        this.newDiv.classList.add("resultDiv"); 
         this.newDiv.style.padding = "2.5px";
         this.newDiv.style.transition = ".075s ease";
 
