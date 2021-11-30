@@ -64,13 +64,6 @@ $(animate("#search-button"));
 $(animate("#filter-button"));
 
 
-function removeResultDivs() {
-    var elements = document.getElementsByClassName("resultDiv");
-    while(elements.length > 0) {
-        elements[0].parentNode.removeChild(elements[0]);
-    }
-}
-
 /* search button event listener */
 window.onload = function() {
 
@@ -90,6 +83,14 @@ window.onload = function() {
 
         $(page.resultSection).animate({height: '100px'});
     });
+}
+
+
+function removeResultDivs() {
+    var elements = document.getElementsByClassName("resultDiv");
+    while(elements.length > 0) {
+        elements[0].parentNode.removeChild(elements[0]);
+    }
 }
 
 
@@ -241,7 +242,7 @@ function getInput(elementId, alertFieldName, desiredInputType, alertTypeRequest)
     }
     else {
         return elementValue;
-    };
+    }
 }
 
 
@@ -366,7 +367,6 @@ function writeDataToPage(restaurantResults,
     hotelResultLength) {
 
     /* RESIZING ANNIMATION */
-    //var outputDiv = document.querySelector("#output-section");
     var oldHeight = $(page.resultSection).height();
 
     /* RESTAURANTS */
@@ -396,6 +396,7 @@ function writeDataToPage(restaurantResults,
 }
 
 function findLargestDiv() {
+
     const restaurantContainer = document.querySelector('#resultContainerRestuarants');
     const attractionsContainer = document.querySelector('#resultContainerAttractions');
     const hotelContainer = document.querySelector('#resultContainerHotels');
@@ -413,6 +414,7 @@ function findLargestDiv() {
     else {
         return heightHotel;
     }
+
 }
 
 
@@ -535,7 +537,7 @@ class BuildDistanceDiv extends BuildDiv {
 /* Filtering functionality */
 
 /* Define filtering buttons/fields/checkboxes */
-const filterButton = document.querySelector("filter");
+const filterButton = document.querySelector("#filter-button");
 filterButton.addEventListener('click', () => {
     console.log('Filter button clicked...');
     filterResults();
@@ -543,7 +545,7 @@ filterButton.addEventListener('click', () => {
 
 const checkbox_weather   = document.querySelector(".weather");
 const checkbox_distance  = document.querySelector(".distance");
-const checkbox_rating    = document.querySelector(".cheapest"); /* change id name?? */
+const checkbox_rating    = document.querySelector(".cheapest"); /* change id name?? lol ok i get it ill name it properly >.> */
 const checkbox_open      = document.querySelector(".open");
 
 function pullFilterArgs () {
