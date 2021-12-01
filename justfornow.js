@@ -1,3 +1,4 @@
+import { runFiltering } from "./filterScript";
 import {RestaurantRequest, AttractionRequest, HotelRequest, GeoCodeRequest } from "./requester.mjs";
 
 
@@ -537,7 +538,7 @@ class BuildDistanceDiv extends BuildDiv {
 /* Filtering functionality */
 
 /* Define filtering buttons/fields/checkboxes */
-const filterButton = document.querySelector("#filter-button");
+const filterButton = document.querySelector(".filter-button");
 filterButton.addEventListener('click', () => {
     console.log('Filter button clicked...');
     filterResults();
@@ -569,10 +570,12 @@ function filterResults () {
         clearResults();
     }
     /* Read in all of the filtering inputs from the page (max, min, checkbox bools) */
-    let filterArgs = getFilterArgs();
+    let filterArgs = pullFilterArgs();
 
     /* get results from allResultsSet */
     let allResultsJSON = allResultSet.getAllResults();
+
+    runFiltering(filterArgs, allResultsJSON, writeDataToPage);
 }
 
 /* Clear data from page / reset page */
