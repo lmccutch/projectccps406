@@ -81,12 +81,12 @@ export class FilteredResults extends ResultSet {
         this.restaurantDataLength = resultListLength;
     }
     storeAttractionList(resultList, resultListLength) {
-        this.restaurantData = resultList;
-        this.restaurantDataLength = resultListLength;
+        this.attractionData = resultList;
+        this.attractionDataLength = resultListLength;
     }
     storeHotelList(resultList, resultListLength) {
-        this.restaurantData = resultList;
-        this.restaurantDataLength = resultListLength;
+        this.hotelData = resultList;
+        this.hotelDataLength = resultListLength;
     }
 }
 

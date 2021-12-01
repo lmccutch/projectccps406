@@ -614,10 +614,11 @@ function filterResults () {
     let filterArgs = pullFilterArgs();
 
     /* get results from allResultsSet */
-    let allResultsJSON = allResultSet.getAllResults();
+    let allResultsInJSON = allResultSet.getAllResults();
+    console.log(`Length of hotel data being passed to filtering func: ${allResultsInJSON["hotelData"].length}`);
 
     removeResultDivs();
-    runFiltering(filterArgs, allResultsJSON, writeDataToPage);
+    runFiltering(filterArgs, allResultsInJSON, writeDataToPage);
 }
 
 /* Clear data from page / reset page */
