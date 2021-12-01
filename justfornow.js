@@ -2,10 +2,11 @@ import {RestaurantRequest, AttractionRequest, HotelRequest, GeoCodeRequest } fro
 import { runFiltering } from "./filterScript.mjs"
 
 // filter button connects to function
+var defaultPosition = { lat: 43.658298, lng: -79.380783 };
 
 /* Load map */
-function initMap() {
-    var position = { lat: 43.658298, lng: -79.380783 };
+function initMap(lat, lng) {
+    var position = {lat:lat, lng:lng} //{ lat: 43.658298, lng: -79.380783 };
     window.map = new google.maps.Map(document.getElementById("map"), {
         zoom: 16,
         center: position
@@ -36,7 +37,7 @@ function initMap() {
 
     });
 }
-initMap();
+initMap(defaultPosition['lat'], defaultPosition['lng']);
 
 
 /* Ripple Effect and Hover Animation on buttons */
@@ -82,7 +83,7 @@ window.onload = function() {
     
     resetButton.addEventListener('click', () => {
         console.log('Reset button clicked...');
-        initMap();   //Resets Map
+        initMap(defaultPosition['lat'], defaultPosition['lng']);   //Resets Map
         removeResultDivs();   //Removes all results on screen
         page.resetUserLocation();
         $(page.resultSection).animate({height: '100px'});
