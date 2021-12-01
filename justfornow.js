@@ -259,6 +259,7 @@ function makeRequest () {
     /* placeholder */
     console.log('Reseting Results');
     removeResultDivs();
+    $(page.resultSection).animate({height: '100px'})
 
     console.log('Search button clicked... makeRequest called...');
     restaurantSubmission();
