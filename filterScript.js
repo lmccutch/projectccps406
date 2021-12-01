@@ -4,14 +4,7 @@ filtering args pulled in from the page's user input. Will run the algos over the
 writeToPage (passed in from front-end module?) to write all the results back to the page.
 */
 
-"inputField_keyword":     getInput("input-filter-for", "Filter For", String, "words"),
-        "inputField_maxDistance": getInput("input-max-distance", "Maximum Distance Away", Number, "number"),
-        "inputField_numRooms":    getInput("input-num-rooms", "Number of Rooms", Number, "number"),
-        "inputField_numNights":   getInput("input-num-nights", "Number of Nights", Number, "number"),
-        "checkbox_weather":       checkbox_weather.value,
-        "checkbox_distance":      checkbox_distance.value,
-        "checkbox_rating":        checkbox_rating.value,
-        "checkbox_open":          checkbox_open.value
+import { FilteredResults } from "./AppClasses.mjs";
 
 export function runFiltering(args, data, writeFunc) {
 
