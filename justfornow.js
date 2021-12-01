@@ -1,6 +1,7 @@
 import { runFiltering } from "./filterScript";
 import {RestaurantRequest, AttractionRequest, HotelRequest, GeoCodeRequest } from "./requester.mjs";
 
+// filter button connects to function
 
 /* Load map */
 function initMap() {
@@ -73,6 +74,8 @@ window.onload = function() {
     searchButton.addEventListener('click', () => {
         console.log('Search button clicked...');
         makeRequest();   //We need to use the page object to stop requests if there is already inputs
+        var temp = document.querySelector('[data-input-max-distance]').value;
+        console.log(`Temp var = ${typeof temp}`);
     });
 
     const resetButton = document.querySelector("#reset-button");
@@ -92,6 +95,8 @@ function removeResultDivs() {
     while(elements.length > 0) {
         elements[0].parentNode.removeChild(elements[0]);
     }
+    page.resetResultsOnPage();
+    page.resetUserLocation();
 }
 
 
@@ -176,7 +181,7 @@ const allResultSet = new ResultSet();
 /* Object to handle page state for result writing, etc */
 class Page {
     constructor() {
-        this.userLocation = null
+        this.userLocation = { lat: 43.658298, lng: -79.380783 };
         this.resultsOnPage = false;
         this.resultSection = document.querySelector("#output-section");
     }
@@ -199,6 +204,9 @@ class Page {
     }
     getUserLocation () {
         return this.userLocation;
+    }
+    resetUserLocation() {
+        this.userLocation = { lat: 43.658298, lng: -79.380783 };
     }
 }
 
@@ -250,7 +258,11 @@ function getInput(elementId, alertFieldName, desiredInputType, alertTypeRequest)
 /* Make request */
 function makeRequest () {
     /* placeholder */
-    console.log('Search button clicked... makeRequest called...')
+    console.log('Reseting Results');
+    removeResultDivs();
+    $(page.resultSection).animate({height: '100px'})
+
+    console.log('Search button clicked... makeRequest called...');
     restaurantSubmission();
 }
 
@@ -264,8 +276,9 @@ function restaurantSubmission () {
     console.log('User Location = ', page.getUserLocation());    // Now we can just refer to the page Object via getUserLocation() to get LatLng for API request
 
 
-    let input_latitude = '37.733';
-    let input_longitude = '-122.447';
+    let latlng = page.getUserLocation();
+    let input_latitude = latlng['lat'];
+    let input_longitude = latlng['lng'];
 
     console.log('User input latitude: ', input_latitude);
     console.log('User input longitude: ', input_longitude);
@@ -289,8 +302,9 @@ function restaurantSubmission () {
 }
 
 function attractionSubmission () {
-    let input_latitude = '37.733';
-    let input_longitude = '-122.447';
+    let latlng = page.getUserLocation();
+    let input_latitude = latlng['lat'];
+    let input_longitude = latlng['lng'];
 
     console.log('User input latitude: ', input_latitude);
     console.log('User input longitude: ', input_longitude);
@@ -311,8 +325,9 @@ function attractionSubmission () {
 }
 
 function hotelSubmission () {
-    let input_latitude = '37.733';
-    let input_longitude = '-122.447';
+    let latlng = page.getUserLocation();
+    let input_latitude = latlng['lat'];
+    let input_longitude = latlng['lng'];
 
     console.log('User input latitude: ', input_latitude);
     console.log('User input longitude: ', input_longitude);
@@ -322,18 +337,18 @@ function hotelSubmission () {
     let hotel_request_args = {
         "lat": input_latitude,
         "long": input_longitude,
-        "adults": "2",              /* should be switched to an input */
-        "rooms": "1",               /* should be switched to an input */
-        "chldAge": "7%2C10",          /* should be switched to an input */
-        "amen": "beach%2Cbar_lounge%2Cairport_transportation",   /* should be switched to an input */
-        "checkin": "2021-12-12",    /* should be switched to an input */
-        "nights": "2",              /* should be switched to an input */
-        "cur": 'USD',
-        "lunit": 'km', 
-        "lang": 'en_US',
-        "hotclass": "1%2C2%2C3",
-        "limit": "30",
-        "dist": "30"
+        //"adults": "2",              /* should be switched to an input */
+        //"rooms": "1",               /* should be switched to an input */
+        //"chldAge": "7%2C10",          /* should be switched to an input */
+        //"amen": "beach%2Cbar_lounge%2Cairport_transportation",   /* should be switched to an input */
+        //"checkin": "2022-05-12",    /* should be switched to an input */
+        //"nights": "2",              /* should be switched to an input */
+        //"cur": 'USD',
+        //"lunit": 'km', 
+        //"lang": 'en_US',
+        //"hotclass": "1%2C2%2C3",
+        //"limit": "30",
+        //"dist": "30"
     }
     var req = new HotelRequest(hotel_request_args, function (results, resultLength) {
         allResultSet.storeHotelList(results, resultLength);
@@ -372,21 +387,37 @@ function writeDataToPage(restaurantResults,
 
     /* RESTAURANTS */
     createHeaderDiv('Restaurants:', '#resultContainerRestuarants');
-    for (let i=0; i < restaurantResultLength && i < 10; i++) {
-        createDivSet(restaurantResults, i, '#resultContainerRestuarants', 'R');
+    if(restaurantResultLength == 0) {
+        createEmptyDiv('#resultContainerRestuarants');
+    }
+    else {
+        for (let i=0; i < restaurantResultLength && i < 10; i++) {
+            createDivSet(restaurantResults, i, '#resultContainerRestuarants', 'R');
+        }
     }
 
     /* ATTRACTIONS */
     createHeaderDiv('Attractions:', '#resultContainerAttractions');
-    for (let i=0; i < attractionResultLength && i < 10; i++) {
-        createDivSet(attractionResults, i, '#resultContainerAttractions', 'A');
+    if(attractionResultLength == 0) {
+        createEmptyDiv('#resultContainerAttractions');
+    }
+    else {
+        for (let i=0; i < attractionResultLength && i < 10; i++) {
+            createDivSet(attractionResults, i, '#resultContainerAttractions', 'A');
+        }
     }
 
     /* HOTELS */
     createHeaderDiv('Hotels:', '#resultContainerHotels');
-    for (let i=0; i < hotelResultLength && i < 10; i++) {
-        createDivSet(hotelResults, i, '#resultContainerHotels', 'H');
+    if(hotelResultLength == 0) {
+        createEmptyDiv('#resultContainerHotels');
     }
+    else {
+        for (let i=0; i < hotelResultLength && i < 10; i++) {
+            createDivSet(hotelResults, i, '#resultContainerHotels', 'H');
+        }
+    }
+    
 
     /* RESIZING ANNIMATION COMPLETED */
     var newHeight = findLargestDiv() + 100;
@@ -440,6 +471,18 @@ function createHeaderDiv(headerName, container) {
     headerDiv.style.padding = "2.5px";
     headerDiv.innerHTML = String(headerName);
     resultContainer.appendChild(headerDiv);
+}
+
+function createEmptyDiv(container) {
+    
+    const resultContainer = document.querySelector(container);
+
+    let headerDiv = document.createElement("div");
+    headerDiv.classList.add("resultDiv");
+    headerDiv.style.padding = "2.5px";
+    headerDiv.innerHTML = String("Sorry, We have found no Results.");
+    resultContainer.appendChild(headerDiv);
+
 }
 
 
