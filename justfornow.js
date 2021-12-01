@@ -1,5 +1,5 @@
-import { runFiltering } from "./filterScript";
 import {RestaurantRequest, AttractionRequest, HotelRequest, GeoCodeRequest } from "./requester.mjs";
+import { runFiltering } from "./filterScript.mjs"
 
 // filter button connects to function
 
@@ -84,7 +84,7 @@ window.onload = function() {
         console.log('Reset button clicked...');
         initMap();   //Resets Map
         removeResultDivs();   //Removes all results on screen
-
+        page.resetUserLocation();
         $(page.resultSection).animate({height: '100px'});
     });
 }
@@ -96,8 +96,10 @@ function removeResultDivs() {
         elements[0].parentNode.removeChild(elements[0]);
     }
     page.resetResultsOnPage();
-    page.resetUserLocation();
+    
 }
+
+
 
 
 /* result set class to store search result data from all 3 endpoints until writing to page */
@@ -581,29 +583,25 @@ class BuildDistanceDiv extends BuildDiv {
 /* Filtering functionality */
 
 /* Define filtering buttons/fields/checkboxes */
-const filterButton = document.querySelector(".filter-button");
+const filterButton = document.querySelector("#filter-button");
 filterButton.addEventListener('click', () => {
     console.log('Filter button clicked...');
     filterResults();
 });
 
-const checkbox_weather   = document.querySelector(".weather");
-const checkbox_distance  = document.querySelector(".distance");
-const checkbox_rating    = document.querySelector(".cheapest"); /* change id name?? lol ok i get it ill name it properly >.> */
-const checkbox_open      = document.querySelector(".open");
+const checkbox_rated    = document.querySelector("[data-rated-checkbox]"); /* change id name?? lol ok i get it ill name it properly >.> */
+console.log(`Checkbox_rated: ${checkbox_rated.checked}`);
+const checkbox_reviewed      = document.querySelector("#reviewed");
 
 function pullFilterArgs () {
     /* pull all the current filtering values, and return them in json to be passed to filtering module */
-    let getFilterArgs = {
-        "inputField_keyword":     getInput("input-filter-for", "Filter For", String, "words"),
-        "inputField_maxDistance": getInput("input-max-distance", "Maximum Distance Away", Number, "number"),
-        "inputField_numRooms":    getInput("input-num-rooms", "Number of Rooms", Number, "number"),
-        "inputField_numNights":   getInput("input-num-nights", "Number of Nights", Number, "number"),
-        "checkbox_weather":       checkbox_weather.value,
-        "checkbox_distance":      checkbox_distance.value,
-        "checkbox_rating":        checkbox_rating.value,
-        "checkbox_open":          checkbox_open.value
+    let FilterArgs = {
+        "inputField_keyword":     document.querySelector('#input-filter-for').value, //getInput("input-filter-for", "Filter For", String, "words")
+        "inputField_maxDistance": document.querySelector('#input-max-distance').value, //getInput("input-max-distance", "Maximum Distance Away", Number, "number")
+        "checkbox_rated":         checkbox_rated.checked,
+        "checkbox_reviewed":      checkbox_reviewed.checked
     }
+    return FilterArgs;
 }
 
 function filterResults () {
@@ -618,6 +616,7 @@ function filterResults () {
     /* get results from allResultsSet */
     let allResultsJSON = allResultSet.getAllResults();
 
+    removeResultDivs();
     runFiltering(filterArgs, allResultsJSON, writeDataToPage);
 }
 
