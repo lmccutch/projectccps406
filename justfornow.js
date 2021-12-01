@@ -52,7 +52,7 @@ function animate(buttons) {
 
         $(this).children('span').addClass('active');
         setTimeout(function() {
-            $('#search-button span').removeClass('active');
+            $(`${buttons} span`).removeClass('active');
         },500)
     });
 
@@ -384,6 +384,13 @@ function writeDataToPage(restaurantResults,
     attractionResultLength,
     hotelResults,
     hotelResultLength) {
+
+    /* Setting up the map */
+    let latlng = page.getUserLocation();
+    let input_latitude = latlng['lat'];
+    let input_longitude = latlng['lng'];
+
+    initMap(input_latitude, input_longitude);
 
     /* RESIZING ANNIMATION */
     var oldHeight = $(page.resultSection).height();
