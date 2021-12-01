@@ -1,5 +1,9 @@
 import {RestaurantRequest, AttractionRequest, HotelRequest, GeoCodeRequest } from "./requester.mjs";
 
+// filter button connects to function
+// reset button needs to be connected to function
+// userlocation 
+
 
 /* Load map */
 function initMap() {
@@ -91,6 +95,7 @@ function removeResultDivs() {
     while(elements.length > 0) {
         elements[0].parentNode.removeChild(elements[0]);
     }
+    page.resetResultsOnPage();
 }
 
 
@@ -175,7 +180,7 @@ const allResultSet = new ResultSet();
 /* Object to handle page state for result writing, etc */
 class Page {
     constructor() {
-        this.userLocation = null
+        this.userLocation = { lat: 43.658298, lng: -79.380783 };
         this.resultsOnPage = false;
         this.resultSection = document.querySelector("#output-section");
     }
@@ -198,6 +203,9 @@ class Page {
     }
     getUserLocation () {
         return this.userLocation;
+    }
+    resetUserLocation() {
+        this.userLocation = { lat: 43.658298, lng: -79.380783 };
     }
 }
 
@@ -263,8 +271,9 @@ function restaurantSubmission () {
     console.log('User Location = ', page.getUserLocation());    // Now we can just refer to the page Object via getUserLocation() to get LatLng for API request
 
 
-    let input_latitude = '37.733';
-    let input_longitude = '-122.447';
+    let latlng = page.getUserLocation();
+    let input_latitude = latlng['lat'];
+    let input_longitude = latlng['lng'];
 
     console.log('User input latitude: ', input_latitude);
     console.log('User input longitude: ', input_longitude);
@@ -288,8 +297,9 @@ function restaurantSubmission () {
 }
 
 function attractionSubmission () {
-    let input_latitude = '37.733';
-    let input_longitude = '-122.447';
+    let latlng = page.getUserLocation();
+    let input_latitude = latlng['lat'];
+    let input_longitude = latlng['lng'];
 
     console.log('User input latitude: ', input_latitude);
     console.log('User input longitude: ', input_longitude);
@@ -310,8 +320,9 @@ function attractionSubmission () {
 }
 
 function hotelSubmission () {
-    let input_latitude = '37.733';
-    let input_longitude = '-122.447';
+    let latlng = page.getUserLocation();
+    let input_latitude = latlng['lat'];
+    let input_longitude = latlng['lng'];
 
     console.log('User input latitude: ', input_latitude);
     console.log('User input longitude: ', input_longitude);
@@ -371,21 +382,37 @@ function writeDataToPage(restaurantResults,
 
     /* RESTAURANTS */
     createHeaderDiv('Restaurants:', '#resultContainerRestuarants');
-    for (let i=0; i < restaurantResultLength && i < 10; i++) {
-        createDivSet(restaurantResults, i, '#resultContainerRestuarants', 'R');
+    if(restaurantResultLength == 0) {
+        createEmptyDiv('#resultContainerRestuarants');
+    }
+    else {
+        for (let i=0; i < restaurantResultLength && i < 10; i++) {
+            createDivSet(restaurantResults, i, '#resultContainerRestuarants', 'R');
+        }
     }
 
     /* ATTRACTIONS */
     createHeaderDiv('Attractions:', '#resultContainerAttractions');
-    for (let i=0; i < attractionResultLength && i < 10; i++) {
-        createDivSet(attractionResults, i, '#resultContainerAttractions', 'A');
+    if(attractionResultLength == 0) {
+        createEmptyDiv('#resultContainerAttractions');
+    }
+    else {
+        for (let i=0; i < attractionResultLength && i < 10; i++) {
+            createDivSet(attractionResults, i, '#resultContainerAttractions', 'A');
+        }
     }
 
     /* HOTELS */
     createHeaderDiv('Hotels:', '#resultContainerHotels');
-    for (let i=0; i < hotelResultLength && i < 10; i++) {
-        createDivSet(hotelResults, i, '#resultContainerHotels', 'H');
+    if(hotelResultLength == 0) {
+        createEmptyDiv('#resultContainerHotels');
     }
+    else {
+        for (let i=0; i < hotelResultLength && i < 10; i++) {
+            createDivSet(hotelResults, i, '#resultContainerHotels', 'H');
+        }
+    }
+    
 
     /* RESIZING ANNIMATION COMPLETED */
     var newHeight = findLargestDiv() + 100;
@@ -439,6 +466,18 @@ function createHeaderDiv(headerName, container) {
     headerDiv.style.padding = "2.5px";
     headerDiv.innerHTML = String(headerName);
     resultContainer.appendChild(headerDiv);
+}
+
+function createEmptyDiv(container) {
+    
+    const resultContainer = document.querySelector(container);
+
+    let headerDiv = document.createElement("div");
+    headerDiv.classList.add("resultDiv");
+    headerDiv.style.padding = "2.5px";
+    headerDiv.innerHTML = String("Sorry, We have found no Results.");
+    resultContainer.appendChild(headerDiv);
+
 }
 
 
