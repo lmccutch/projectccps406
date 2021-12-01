@@ -96,6 +96,7 @@ function removeResultDivs() {
         elements[0].parentNode.removeChild(elements[0]);
     }
     page.resetResultsOnPage();
+    page.resetUserLocation();
 }
 
 
