@@ -415,7 +415,7 @@ input:focus::placeholder {
 
 .specific-places {
     width: 100%;
-    height: calc(250px/4);
+    height: calc(250px/2);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -446,7 +446,7 @@ input:focus::placeholder {
 
 .distance {
     width: 100%;
-    height: calc(250px/4);
+    height: calc(250px/2);
     display: flex;
     justify-content: space-between;
     align-items: center;
