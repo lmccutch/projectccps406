@@ -1,5 +1,6 @@
 import {RestaurantRequest, AttractionRequest, HotelRequest, GeoCodeRequest } from "./requester.mjs";
 import { runFiltering } from "./filterScript.mjs"
+import { ResultSet, Page } from "./AppClasses.mjs"
 
 // filter button connects to function
 
@@ -99,142 +100,37 @@ function removeResultDivs() {
     
 }
 
-
-
-
-/* result set class to store search result data from all 3 endpoints until writing to page */
-class ResultSet {
-    constructor() {
-        this.restaurantData = null;
-        this.restaurantDataLength = 0;
-        this.attractionData = null;
-        this.attractionDataLength = 0;
-        this.hotelData = null;
-        this.hotelDataLength = 0;
-    }
-    storeRestaurantList(resultList, resultListLength) {
-        var [resultList, resultListLength] = this.removeUndefined(resultList, resultListLength);
-        this.restaurantData = resultList;
-        this.restaurantDataLength = resultListLength;
-    }
-    storeAttractionList(resultList, resultListLength) {
-        var [resultList, resultListLength] = this.removeUndefined(resultList, resultListLength);
-        this.attractionData = resultList;
-        this.attractionDataLength = resultListLength;
-    }
-    storeHotelList(resultList, resultListLength) {
-        var [resultList, resultListLength] = this.removeUndefined(resultList, resultListLength);
-        this.hotelData = resultList;
-        this.hotelDataLength = resultListLength;
-    }
-    getRestaurantList() {
-        return this.restaurantData;
-    }
-    getRestaurantLength () {
-        return this.restaurantDataLength;
-    }
-    getAttractionList() {
-        return this.attractionData;
-    }
-    getAttractionLength() {
-        return this.attractionDataLength;
-    }
-    getHotelList() {
-        return this.hotelData;
-    }
-    getHotelLength() {
-        return this.hotelDataLength;
-    }
-    getAllResults() {
-        let allResultsJSON = {
-            "restaurantData":   this.getRestaurantList(),
-            "restaurantLength": this.getRestaurantLength(),
-            "attractionData":   this.getAttractionList(),
-            "attractionLength": this.getAttractionLength(),
-            "hotelData":        this.getHotelList(),
-            "hotelLength":      this.getHotelLength()
-        }
-        return allResultsJSON;
-    }
-    removeUndefined(results, resultLength) {
-        let validResults = [];
-        let resultsUndefined = 0;
-        let loopResultLength = resultLength;
-        for (let i = 0; i < loopResultLength; i++) {
-            if (results[i]['name'] == undefined) {
-                /* reduce resultLength by 1 */
-                resultLength--;
-                resultsUndefined++;
-            }
-            else {
-                validResults.push(results[i]);
-            }
-        }
-        console.log(`Undefined results removed: ${resultsUndefined}`);
-        console.log(validResults);
-        /* return list of 2 variables, this must be deconstructed */
-        return [validResults, resultLength]; 
-    }
-}
-
-/* Create the all result data structure */
+/* Create the all result data structure and page data structure for storing data across functions */
 const allResultSet = new ResultSet();
-
-/* Object to handle page state for result writing, etc */
-class Page {
-    constructor() {
-        this.userLocation = { lat: 43.658298, lng: -79.380783 };
-        this.resultsOnPage = false;
-        this.resultSection = document.querySelector("#output-section");
-    }
-    setResultsOnPage () {
-        this.resultsOnPage = true;
-    }
-    resetResultsOnPage () {
-        this.resultsOnPage = false;
-    }
-    isResultsOnPage() {
-        if (this.resultsOnPage == true) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    setUserLocation (lati, long) {
-        this.userLocation = {lat: lati, lng: long};
-    }
-    getUserLocation () {
-        return this.userLocation;
-    }
-    resetUserLocation() {
-        this.userLocation = { lat: 43.658298, lng: -79.380783 };
-    }
-}
-
 const page = new Page();
 
 /* Take input from page */
 function convertToUniform(inputString, outputType) {
     /* Turn an input string into the outputType where possible, otherwise return false. Meant for
        input strings that are uniform in type, i.e. won't work with an address with words and numbers. */
-    
+       console.log(`   | convertToUniform() |
+       inputString: ${inputString}
+       inputType:   ${typeof inputString}
+       outputType:  ${outputType}`)
     /* if input string is a word */
-    if (isNaN(inputString) == true) {
+    if ((isNaN(inputString) == true) || (inputString == '')) {
+        console.log('Converter: input is word(s)')
         /* if outputType is string */
         if (outputType == 'string') {
-            return inputType;
+            console.log('Converter: outputType set to string')
+            return inputString;
         }
         /* if outputType is a number */
         else {
-            return false;
+            return null;
         }
     }
     /* if input string is a number */
     else {
+        console.log('Converter: input is number')
         /* if outputType is a string */
         if (outputType == 'string') {
-            return false;
+            return null;
         }
         /* if outputType is not a string */
         else {
@@ -243,13 +139,24 @@ function convertToUniform(inputString, outputType) {
     }
 }
 
-function getInput(elementId, alertFieldName, desiredInputType, alertTypeRequest) {
+function getInput(elementId, alertFieldName, desiredInputType, alertTypeRequest, defaultValue = null) {
     /* Get the value from a page element by element id, and ensure it is appropriate input type before accepting. */
-      
+    
     var elementString = document.getElementById(elementId).value;
+    console.log(`---------------------- getInput() Called ----------------------
+        elementID:                        ${elementId}
+        desiredInputType:                 ${desiredInputType}
+        defaultValue (bypasses if set): < ${defaultValue} >
+        element value:                    ${elementString}`)
+    if ((defaultValue != null) & (elementString == defaultValue)) {
+        console.log('   getInput() : defaultValue found, bypassing type check and passing default value (empty value)');
+        return defaultValue; // bypasses the type checker for when the field is empty, allows default value to pass through if set
+    }
+    else {}
     var elementValue = convertToUniform(elementString, desiredInputType);
-    if (elementValue == false) {
+    if (elementValue == null) {
         alert(`Please only enter ${alertTypeRequest} into the ${alertFieldName} field.`);
+        return null;
     }
     else {
         return elementValue;
@@ -426,7 +333,7 @@ function writeDataToPage(restaurantResults,
     $(page.resultSection).height(oldHeight);
     $(page.resultSection).animate({height: newHeight});
 
-    console.log('Write data function reached end...');
+    console.log('********** WRITE DATA **********')
 }
 
 function findLargestDiv() {
@@ -585,7 +492,6 @@ class BuildDistanceDiv extends BuildDiv {
 /* Define filtering buttons/fields/checkboxes */
 const filterButton = document.querySelector("#filter-button");
 filterButton.addEventListener('click', () => {
-    console.log('Filter button clicked...');
     filterResults();
 });
 
@@ -593,30 +499,37 @@ const checkbox_rated    = document.querySelector("[data-rated-checkbox]"); /* ch
 console.log(`Checkbox_rated: ${checkbox_rated.checked}`);
 const checkbox_reviewed      = document.querySelector("#reviewed");
 
+
 function pullFilterArgs () {
     /* pull all the current filtering values, and return them in json to be passed to filtering module */
     let FilterArgs = {
-        "inputField_keyword":     document.querySelector('#input-filter-for').value, //getInput("input-filter-for", "Filter For", String, "words")
-        "inputField_maxDistance": document.querySelector('#input-max-distance').value, //getInput("input-max-distance", "Maximum Distance Away", Number, "number")
+        "inputField_keyword":     getInput("input-filter-for", "Filter For", 'string', "one word", ''), // last arg is to set defaultValue
+        "inputField_maxDistance": getInput("input-max-distance", "Maximum Distance Away", 'number', "number", ''), // last arg is to set defaultValue
         "checkbox_rated":         checkbox_rated.checked,
         "checkbox_reviewed":      checkbox_reviewed.checked
     }
     return FilterArgs;
 }
 
+
 function filterResults () {
     /* Pulls data from allResultSet object, if resultsOnPage flag=True then clears page, calls filtering algorithms,
        then calls writeToPage with the new data. */
+    let filterArgs = pullFilterArgs();
+    // Check that there are no input fields with wrong data types in them, will be value of "null" if so
+    if (isIn(null, Object.values(filterArgs))) {
+        console.log('==================== WRONG DATA TYPES IN INPUT FIELDS -> Filtering not called. ====================')
+        return null; // don't filter - don't let wrong data types cause errors in filter functions
+    }
+
+    // clear page results in prep for write
     if (page.isResultsOnPage() == true) {
         clearResults();
     }
     /* Read in all of the filtering inputs from the page (max, min, checkbox bools) */
-    let filterArgs = pullFilterArgs();
-
+    
     /* get results from allResultsSet */
     let allResultsInJSON = allResultSet.getAllResults();
-    console.log(`Length of hotel data being passed to filtering func: ${allResultsInJSON["hotelData"].length}`);
-
     removeResultDivs();
     runFiltering(filterArgs, allResultsInJSON, writeDataToPage);
 }
@@ -629,6 +542,13 @@ function clearResults() {
         oneResultDiv.remove();
     })
     page.resetResultsOnPage();
+}
+
+function isIn(thing, list) {
+    for (let i = 0; i < list.length; i++ ) {
+        if (list[i] == thing) {return true}
+    }
+    return false;
 }
 
 /* Finds Latitude and Longitude based on Address */
