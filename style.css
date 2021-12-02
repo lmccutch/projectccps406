@@ -560,16 +560,16 @@ input:focus::placeholder {
     cursor: pointer;
     overflow: hidden;
     z-index: 1;
-    transition: .3s;
+    transition: .6s;
 }
 
 .search span {
-    width: 1px;
-    height: 1px;
+    border-radius: 1px;
+    width: 2px;
+    height: 2px;
     position: absolute;
     opacity: 0;
     background: #ffffff;
-    border-radius: 50%;
 }
 
 .search span.active {
@@ -594,12 +594,12 @@ input:focus::placeholder {
 }
 
 .filter span {
-    width: 1px;
-    height: 1px;
+    width: 2px;
+    height: 2px;
     position: absolute;
     opacity: 0;
     background: #ffffff;
-    border-radius: 50%;
+    border-radius: 1px;
 }
 
 .filter span.active {
@@ -613,7 +613,7 @@ input:focus::placeholder {
     }
 
     100% {
-        transform: scale(450);
+        transform: scale(175);
         opacity: 0;
     }
 } 

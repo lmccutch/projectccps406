@@ -3,10 +3,11 @@ import { runFiltering } from "./filterScript.mjs"
 import { ResultSet, Page } from "./AppClasses.mjs"
 
 // filter button connects to function
+var defaultPosition = { lat: 43.658298, lng: -79.380783 };
 
 /* Load map */
-function initMap() {
-    var position = { lat: 43.658298, lng: -79.380783 };
+function initMap(lat, lng) {
+    var position = {lat:lat, lng:lng} //{ lat: 43.658298, lng: -79.380783 };
     window.map = new google.maps.Map(document.getElementById("map"), {
         zoom: 16,
         center: position
@@ -37,7 +38,7 @@ function initMap() {
 
     });
 }
-initMap();
+initMap(defaultPosition['lat'], defaultPosition['lng']);
 
 
 /* Ripple Effect and Hover Animation on buttons */
@@ -52,7 +53,7 @@ function animate(buttons) {
 
         $(this).children('span').addClass('active');
         setTimeout(function() {
-            $('#search-button span').removeClass('active');
+            $(`${buttons} span`).removeClass('active');
         },500)
     });
 
@@ -83,7 +84,7 @@ window.onload = function() {
     
     resetButton.addEventListener('click', () => {
         console.log('Reset button clicked...');
-        initMap();   //Resets Map
+        initMap(defaultPosition['lat'], defaultPosition['lng']);   //Resets Map
         removeResultDivs();   //Removes all results on screen
         page.resetUserLocation();
         $(page.resultSection).animate({height: '100px'});
@@ -290,6 +291,13 @@ function writeDataToPage(restaurantResults,
     attractionResultLength,
     hotelResults,
     hotelResultLength) {
+
+    /* Setting up the map */
+    let latlng = page.getUserLocation();
+    let input_latitude = latlng['lat'];
+    let input_longitude = latlng['lng'];
+
+    initMap(input_latitude, input_longitude);
 
     /* RESIZING ANNIMATION */
     var oldHeight = $(page.resultSection).height();

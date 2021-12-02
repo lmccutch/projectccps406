@@ -62,7 +62,7 @@ export function runFiltering(args, data, writeFunc) {
     );
     }
     else {};
-    
+
     /* Check if 'reviewed' filter needs to be applied */
     if (args["checkbox_reviewed"] != false) {
         /* Filter for rated results */
@@ -114,7 +114,7 @@ export function runFiltering(args, data, writeFunc) {
         filteredResultsStore.getAttractionList(),
         filteredResultsStore.getAttractionLength(),
         args["inputField_keyword"]
-        
+
         );
         filteredResultsStore.storeAttractionList(
         filtResults_keyword["filteredData"],
@@ -280,7 +280,7 @@ function filterDistance(data, len, argVal) {
     for (let i = 0; i < len; i++) {
         if ("distance" in data[i]) {
             if (parseFloat(data[i]["distance"]) <= parseFloat(argVal)) {
-                
+
                 filteredData.push(data[i]);
             }
             else {
@@ -320,6 +320,7 @@ function allWords(sentences) {
         else {}
     }
     return allWords;
+
 }
 
 function pullStrings(listStrings) {
