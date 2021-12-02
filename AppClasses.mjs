@@ -71,6 +71,9 @@ export class ResultSet {
         /* return list of 2 variables, this must be deconstructed */
         return [validResults, resultLength]; 
     }
+    countOfAllResults() {
+        return this.restaurantDataLength + this.attractionDataLength + this.hotelDataLength;
+    }
 }
 
 /* Subclass for data storing filtered data before returning to write to the page */
@@ -93,8 +96,9 @@ export class FilteredResults extends ResultSet {
 /* Object to handle page state for result writing, etc */
 export class Page {
     constructor() {
-        this.userLocation = null
+        this.userLocation = { lat: 43.658298, lng: -79.380783 };
         this.resultsOnPage = false;
+        this.resultSection = document.querySelector("#output-section");
     }
     setResultsOnPage () {
         this.resultsOnPage = true;
@@ -110,10 +114,13 @@ export class Page {
             return false;
         }
     }
-    setUserLocation (lat, long) {
-        this.userLocation = (lat, long);
+    setUserLocation (lati, long) {
+        this.userLocation = {lat: lati, lng: long};
     }
     getUserLocation () {
         return this.userLocation;
+    }
+    resetUserLocation() {
+        this.userLocation = { lat: 43.658298, lng: -79.380783 };
     }
 }

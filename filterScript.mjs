@@ -22,14 +22,18 @@ export function runFiltering(args, data, writeFunc) {
         data["hotelData"],
         data["hotelLength"]
     );
-    console.log(`First restaurant data: ${filteredResultsStore.getRestaurantList()[0]["distance"]}`);
-    console.log(`First hotel data: ${filteredResultsStore.getHotelList()}`);
-    console.log(`Original Data from filter, restaurant length: ${filteredResultsStore.getRestaurantLength()}`)
+    
+    /* Data for filter logging */
+    let initialResultCount = filteredResultsStore.countOfAllResults()
+    let ratedFlag = false;
+    let reviewedFlag = false;
+    let keywordFlag = false;
+    let maxDistanceFlag = false;
 
     /* Check if 'rated' filter needs to be applied */
     if (args["checkbox_rated"] != false) {
         /* Filter for rated results */
-        console.log("Rated Filter Ran");
+        ratedFlag = true;
         let filtResults_rated = filterRated(
         filteredResultsStore.getRestaurantList(),
         filteredResultsStore.getRestaurantLength()
@@ -62,7 +66,7 @@ export function runFiltering(args, data, writeFunc) {
     /* Check if 'reviewed' filter needs to be applied */
     if (args["checkbox_reviewed"] != false) {
         /* Filter for rated results */
-        console.log("Reviewed Filter Ran");
+        reviewedFlag = true;
         let filtResults_reviewed = filterReviewed(
         filteredResultsStore.getRestaurantList(),
         filteredResultsStore.getRestaurantLength()
@@ -95,7 +99,7 @@ export function runFiltering(args, data, writeFunc) {
     /* Check if 'keyword' filter needs to be applied */
     if (args["inputField_keyword"] != "") {
         /* Filter for keyword results */
-        console.log("Keyword Filter Ran");
+        keywordFlag = true;
         let filtResults_keyword = filterKeyword(
         filteredResultsStore.getRestaurantList(),
         filteredResultsStore.getRestaurantLength(),
@@ -130,9 +134,9 @@ export function runFiltering(args, data, writeFunc) {
     else {};
 
     /* Check if 'keyword' filter needs to be applied */
-    if (args["inputField_maxDistance"] != "") {
+    if (args["inputField_maxDistance"] != "") {   // "" must be the default value set in the filter function from main script
         /* Filter for keyword results */
-        console.log("maxDistance Filter Ran");
+        maxDistanceFlag = true;
         let filtResults_distance = filterDistance(
         filteredResultsStore.getRestaurantList(),
         filteredResultsStore.getRestaurantLength(),
@@ -166,9 +170,16 @@ export function runFiltering(args, data, writeFunc) {
     }
     else {};
 
-    console.log(`Filtered Data from filter, restaurant length: ${filteredResultsStore.getRestaurantLength()}`)
+    /* Log filter report */
+    console.log(`~~~~~~~~~~~~~~~~~~~~ FILTER FUNCTION RAN ~~~~~~~~~~~~~~~~~~~~
+        \tInitial Results: ${initialResultCount}
+        \t\tFiltered on "rated":        ${ratedFlag}
+        \t\tFiltered on "reviewed:      ${reviewedFlag}
+        \t\tFiltered on "keyword":      ${keywordFlag}
+        \t\tFiltered on "maxDistance":  ${maxDistanceFlag}
+        \tFiltered Results: ${filteredResultsStore.countOfAllResults()}`)
 
-
+    /* Write the filtered data to the page using passed-in func */
     writeFunc(
         filteredResultsStore.getRestaurantList(), 
         filteredResultsStore.getRestaurantLength(),
@@ -242,13 +253,14 @@ function filterReviewed(data, len) {
 }
 
 function filterKeyword(data, len, argVal) {
+    argVal = argVal.toLowerCase();
     let filteredData   = [];
     let filteredLength = len;
     for (let i = 0; i < len; i++) {
         let dict = data[i];
-        let dictKeys = Object.keys(dict);
-        let dictValues = Object.values(dict);
-        let dictValuesAllWords = allWords(dictValues);
+        let dictKeys = pullStrings(Object.keys(dict));
+        let dictValues = pullStrings(Object.values(dict));
+        let dictValuesAllWords = allWords(dictValues).map(x => x.toLowerCase());
         if ((isIn(argVal, dictKeys) == true) || (isIn(argVal, dictValues) == true) || isIn(argVal, dictValuesAllWords)) {
             filteredData.push(data[i]);
         }
@@ -267,7 +279,6 @@ function filterDistance(data, len, argVal) {
     let filteredLength = len;
     for (let i = 0; i < len; i++) {
         if ("distance" in data[i]) {
-            console.log(`argVal: ${argVal}, result distance: ${data[i]["distance"]}`);
             if (parseFloat(data[i]["distance"]) <= parseFloat(argVal)) {
 
                 filteredData.push(data[i]);
@@ -286,7 +297,6 @@ function filterDistance(data, len, argVal) {
     };
 }
 
-
 function isIn(word, list) {
     for (let i = 0; i < list.length; i++ ) {
         if (list[i] == word) {return true}
@@ -303,8 +313,22 @@ function allWords(sentences) {
     let allWords = []
     for (let i = 0; i < sentences.length; i ++ ) {
         let s = sentences[i];
-        let splitSentence = s.split(' ');
+        if ((typeof s) == 'string') {
+            let splitSentence = s.split(' ');
         allWords = allWords.concat(splitSentence);
+        }
+        else {}
     }
     return allWords;
+
+}
+
+function pullStrings(listStrings) {
+    let allStrings = []
+    for (let i = 0; i < listStrings.length; i ++) {
+        if (typeof listStrings[i] == 'string') {
+            allStrings.push(listStrings[i].toLowerCase());
+        }
+    }
+    return allStrings;
 }
