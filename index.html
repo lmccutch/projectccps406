@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
     <script src="jquery-3.6.0.js"></script>
-    <script type="module" src="justfornow.js"></script> <!--type="module"-->
+    <script type="module" src="script4.js"></script> <!--type="module"-->
 </head>
 <body>
     <div class ="wrapper">  
@@ -56,7 +56,7 @@
             </div>
         </div>
         <div id="map"></div>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCiBk5KKCy9blhUxRGXjGbrLE1Ug7UTg_s&callback=initMap" async></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCiBk5KKCy9blhUxRGXjGbrLE1Ug7UTg_s" async></script>
         <div class="input-param">
             <div class="title-block-2-wrapper">
                 <p class="title-block-2">Choose Your Settings</p>
@@ -66,29 +66,29 @@
                 <!--<input type="checkbox" id="weather" class="check">
                     <label for="weather" class="label">Best for the Weather</label>-->
                 <input type="checkbox" id="distance" class="check">
-                    <label for="distance" class="label">Closest to You (Coming Soon!)</label>
-                <input type="checkbox" id="rated" class="check">
+                    <label for="distance" class="label">Closest to You (Coming Soon!)</label> 
+                <input type="checkbox" id="rated" class="check" data-rated-checkbox> 
                     <label for="rated" class="label">Rated</label>
-                <input type="checkbox" id="open" class="check">
-                    <label for="open" class="label">Open Now</label>
+                <input type="checkbox" id="reviewed" class="check">
+                    <label for="reviewed" class="label">Reviewed</label>
             </div>
             <div class="other-params">
                 <div class="specific-places">
                     <p class="places-prompt">Filter For:</p>
-                    <input type="text" id = "input-filter-for" placeholder="Enter Text Here">
+                    <input type="text" id = "input-filter-for" placeholder="Enter Text Here" data-input-filter-for>
                 </div>
                 <div class="distance">
                     <p class="distance-prompt">Maximum Distance Away:</p>
-                    <input type="text" id = "input-max-distance" placeholder="20 km">
+                    <input type="text" id = "input-max-distance" placeholder="20 km" data-input-max-distance>
                 </div>
-                <div class="num-rooms">
+                <!-- <div class="num-rooms">
                     <p class="num-rooms-prompt">Number of Rooms (for Hotels):</p>
                     <input type="text" id = "input-num-rooms" placeholder="3">
                 </div>
                 <div class="num-nights">
                     <p class="num-nights-prompt">Number of Nights (for Hotels):</p>
                     <input type="text" id = "input-num-nights" placeholder="7">
-                </div>
+                </div> -->
             </div>
             <div class="section-places">
                 <button class="search" id="search-button" data-go>Show Recommendations</button>
